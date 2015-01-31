@@ -1,0 +1,34 @@
+# copyleft 2015 teodorescu.serban@gmail.com
+
+e="export"
+
+#
+# these values are set for production.
+# please change to suit your use-case
+# note that prefix MUST contain only letters, numbers and dashes
+# (e.g. for a theoretical romanian-based backup center you wouls use "ro-"
+# so that the urls become "ro-data.hdx.rwlabs.org", "ro-manage.hdx.rwlabs.org"
+#
+
+# --------------------------------------------------------------
+# non-secret values. we dont care about those.
+# --------------------------------------------------------------
+$e HDX_DOMAIN=hdx.rwlabs.org
+$e HDX_PREFIX=
+$e HDX_TYPE=prod
+$e HDX_BASE_VOL_PATH=/data/volumes
+# --------------------------------
+$e HDX_CKAN_ADDR=172.17.42.1
+$e HDX_CKAN_PORT=5001
+$e HDX_CPS_ADDR=172.17.42.1
+$e HDX_CPS_PORT=8080
+$e HDX_DATAPROXY_ADDR=172.17.42.1
+$e HDX_DATAPROXY_PORT=5002
+$e HDX_HTTP_PORT=81
+$e HDX_HTTPS_PORT=444
+$e HDX_SOLR_PORT=8983
+$e HDX_SMTP_PORT=25
+# --------------------------------
+$e HDX_IMG_BASE=teodorescuserban/hdx-
+$e HDX_FOLDER=/srv/hdx
+# --------------------------------------------------------------

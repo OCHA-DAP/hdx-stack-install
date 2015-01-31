@@ -1,0 +1,18 @@
+# copyleft 2015 teodorescu.serban@gmail.com
+
+# install latest docker
+curl -sSL https://get.docker.com/ubuntu/ | sudo sh
+
+# install docker tools
+curl --fail -L -O \
+    https://github.com/phusion/baseimage-docker/archive/master.tar.gz
+tar xzf master.tar.gz
+./baseimage-docker-master/install-tools.sh
+rm -rf master.tar.gz
+rm -rf baseimage-docker-master
+
+# install fig (and pip if it's not yet installed)
+which pip > /dev/null
+[ $? -eq 0 ] || apt-get install python-pip
+
+pip install fig
