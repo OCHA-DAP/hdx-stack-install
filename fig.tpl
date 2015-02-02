@@ -5,7 +5,7 @@
 web:
   image: ${HDX_IMG_BASE}nginx:latest
   volumes:
-     - "/mnt/data/DOCKER/volumes/www:/srv/www"
+     - "${HDX_BASE_VOL_PATH}/www:/srv/www"
      - "/var/log/nginx:/var/log/nginx"
   ports:
     - "${HDX_HTTP_PORT}:80"
@@ -44,7 +44,7 @@ solr:
 dbckan:
   image: ${HDX_IMG_BASE}psql-ckan:latest
   volumes:
-    - "${HDX_BASE_VOL_PATH}/data/psql-ckan:/srv/db"
+    - "${HDX_BASE_VOL_PATH}/psql-ckan:/srv/db"
 
 ckan:
   image: ${HDX_IMG_BASE}ckan:latest
