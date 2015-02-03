@@ -93,14 +93,14 @@ cps:
 ################################################
 
 dbblog:
-  image: ${HDX_IMG_BASE}base-wordpress:latest
+  image: ${HDX_IMG_BASE}mysql:latest
   volumes:
     - "${HDX_BASE_VOL_PATH}/mysql:/srv/db"
 
 blog:
-  image: ${HDX_IMG_BASE}cps:latest
+  image: ${HDX_IMG_BASE}base-wordpress:latest
   links:
-    - dbcps:db
+    - dbblog:db
   ports:
     - "${HDX_BLOG_ADDR}:${HDX_BLOG_PORT}:9000"
   volumes:
