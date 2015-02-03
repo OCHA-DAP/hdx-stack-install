@@ -93,7 +93,7 @@ cps:
 ################################################
 
 dbblog:
-  image: ${HDX_IMG_BASE}mysql:latest
+  image: ${HDX_IMG_BASE}base-wordpress:latest
   volumes:
     - "${HDX_BASE_VOL_PATH}/mysql:/srv/db"
 
@@ -102,7 +102,7 @@ blog:
   links:
     - dbcps:db
   ports:
-    - "${HDX_CPS_ADDR}:${HDX_CPS_PORT}:9000"
+    - "${HDX_BLOG_ADDR}:${HDX_BLOG_PORT}:9000"
 #  environment:
 #    - HDX_SSH_KEY=${HDX_SSH_KEY}
 #    - HDX_SSH_PUB=${HDX_SSH_PUB}
