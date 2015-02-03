@@ -103,6 +103,8 @@ blog:
     - dbcps:db
   ports:
     - "${HDX_BLOG_ADDR}:${HDX_BLOG_PORT}:9000"
+  volumes:
+    - "${HDX_BASE_VOL_PATH}/www/docs:/srv/www/docs"
 #  environment:
 #    - HDX_SSH_KEY=${HDX_SSH_KEY}
 #    - HDX_SSH_PUB=${HDX_SSH_PUB}
