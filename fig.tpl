@@ -26,7 +26,7 @@ web:
 email:
   image: ${HDX_IMG_BASE}email:latest
   ports:
-    - "${HDX_SMTP_PORT}:25"
+    - "${HDX_SMTP_ADDR}:${HDX_SMTP_PORT}:25"
   environment:
     - HDX_DKIM_KEY=${HDX_DKIM_KEY}
 

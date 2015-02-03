@@ -27,6 +27,7 @@ $e HDX_DATAPROXY_PORT=5002
 $e HDX_HTTP_PORT=81
 $e HDX_HTTPS_PORT=444
 $e HDX_SOLR_PORT=8983
+$e HDX_SMTP_ADDR=172.17.42.1
 $e HDX_SMTP_PORT=25
 # --------------------------------
 $e HDX_IMG_BASE=teodorescuserban/hdx-
