@@ -18,6 +18,8 @@ $e HDX_PREFIX=
 $e HDX_TYPE=prod
 $e HDX_BASE_VOL_PATH=/data/volumes
 # --------------------------------
+$e HDX_BLOG_ADDR=172.17.42.1
+$e HDX_BLOG_PORT=9090
 $e HDX_CKAN_ADDR=172.17.42.1
 $e HDX_CKAN_PORT=5001
 $e HDX_CPS_ADDR=172.17.42.1

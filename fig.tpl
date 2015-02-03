@@ -14,6 +14,8 @@ web:
     - HDX_DOMAIN=${HDX_DOMAIN}
     - HDX_PREFIX=${HDX_PREFIX}
     - HDX_SSL_KEY=${HDX_SSL_KEY}
+    - HDX_BLOG_ADDR=${HDX_BLOG_ADDR}
+    - HDX_BLOG_PORT=${HDX_BLOG_PORT}
     - HDX_CKAN_ADDR=${HDX_CKAN_ADDR}
     - HDX_CKAN_PORT=${HDX_CKAN_PORT}
     - HDX_CPS_ADDR=${HDX_CPS_ADDR}
@@ -95,12 +97,12 @@ dbblog:
   volumes:
     - "${HDX_BASE_VOL_PATH}/mysql:/srv/db"
 
-#blog:
-#  image: ${HDX_IMG_BASE}cps:latest
-#  links:
-#    - dbcps:db
-#  ports:
-#    - "${HDX_CPS_ADDR}:${HDX_CPS_PORT}:8080"
+blog:
+  image: ${HDX_IMG_BASE}cps:latest
+  links:
+    - dbcps:db
+  ports:
+    - "${HDX_CPS_ADDR}:${HDX_CPS_PORT}:9000"
 #  environment:
 #    - HDX_SSH_KEY=${HDX_SSH_KEY}
 #    - HDX_SSH_PUB=${HDX_SSH_PUB}
