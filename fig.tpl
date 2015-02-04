@@ -104,7 +104,7 @@ dbblog:
     - "${HDX_BASE_VOL_PATH}/mysql:/srv/db"
 
 blog:
-  image: ${HDX_IMG_BASE}base-wordpress:latest
+  image: ${HDX_IMG_BASE}blog:latest
   links:
     - dbblog:db
   ports:
