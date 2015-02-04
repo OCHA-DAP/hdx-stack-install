@@ -62,13 +62,16 @@ ckan:
   ports:
     - "${HDX_CKAN_ADDR}:${HDX_CKAN_PORT}:9221"
   environment:
-    - HDX_SSH_KEY=${HDX_SSH_KEY}
-    - HDX_SSH_PUB=${HDX_SSH_PUB}
-    - HDX_CKAN_RECAPTCHA_KEY=${HDX_CKAN_RECAPTCHA_KEY}
     - HDX_TYPE=${HDX_TYPE}
     - HDX_DOMAIN=${HDX_DOMAIN}
     - HDX_PREFIX=${HDX_PREFIX}
     - HDX_FILESTORE=/srv/filestore
+    - HDX_CKAN_RECAPTCHA_KEY=${HDX_CKAN_RECAPTCHA_KEY}
+    - HDX_BACKUP_SERVER=${HDX_BACKUP_SERVER}
+    - HDX_BACKUP_USER=${HDX_BACKUP_USER}
+    - HDX_BACKUP_BASE_DIR=${HDX_BACKUP_BASE_DIR}
+    - HDX_SSH_KEY=${HDX_SSH_KEY}
+    - HDX_SSH_PUB=${HDX_SSH_PUB}
 ################################################
 
 dbcps:
@@ -83,12 +86,15 @@ cps:
   ports:
     - "${HDX_CPS_ADDR}:${HDX_CPS_PORT}:8080"
   environment:
-    - HDX_SSH_KEY=${HDX_SSH_KEY}
-    - HDX_SSH_PUB=${HDX_SSH_PUB}
-    - HDX_CKAN_API_KEY=${HDX_CKAN_API_KEY}
     - HDX_DOMAIN=${HDX_DOMAIN}
     - HDX_PREFIX=${HDX_PREFIX}
     - HDX_FOLDER=${HDX_FOLDER}
+    - HDX_CKAN_API_KEY=${HDX_CKAN_API_KEY}
+    - HDX_BACKUP_SERVER=${HDX_BACKUP_SERVER}
+    - HDX_BACKUP_USER=${HDX_BACKUP_USER}
+    - HDX_BACKUP_BASE_DIR=${HDX_BACKUP_BASE_DIR}
+    - HDX_SSH_KEY=${HDX_SSH_KEY}
+    - HDX_SSH_PUB=${HDX_SSH_PUB}
 
 ################################################
 
@@ -105,12 +111,13 @@ blog:
     - "${HDX_BLOG_ADDR}:${HDX_BLOG_PORT}:9000"
   volumes:
     - "${HDX_BASE_VOL_PATH}/www/docs:/srv/www/docs"
-#  environment:
-#    - HDX_SSH_KEY=${HDX_SSH_KEY}
-#    - HDX_SSH_PUB=${HDX_SSH_PUB}
-#    - HDX_CKAN_API_KEY=${HDX_CKAN_API_KEY}
-#    - HDX_DOMAIN=${HDX_DOMAIN}
-#    - HDX_PREFIX=${HDX_PREFIX}
-#    - HDX_FOLDER=${HDX_FOLDER}
+  environment:
+    - HDX_DOMAIN=${HDX_DOMAIN}
+    - HDX_PREFIX=${HDX_PREFIX}
+    - HDX_BACKUP_SERVER=${HDX_BACKUP_SERVER}
+    - HDX_BACKUP_USER=${HDX_BACKUP_USER}
+    - HDX_BACKUP_BASE_DIR=${HDX_BACKUP_BASE_DIR}
+    - HDX_SSH_KEY=${HDX_SSH_KEY}
+    - HDX_SSH_PUB=${HDX_SSH_PUB}
 
 ################################################
