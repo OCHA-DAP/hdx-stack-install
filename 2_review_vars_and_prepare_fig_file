@@ -20,12 +20,12 @@ if [ $? -eq 0 ]; then
     source $mypath/set_vars
     source hdx-install-private/set_private_vars
     envsubst < $mypath/fig.tpl > fig.yml
-    source $mypath/stamp_fig
+    #source $mypath/stamp_fig
 
     echo "fig file created. inspect it."
     echo "Starting mcedit for you in 5 seconds."
     sleep 5
-    mcedit $mypath/fig.yml
+    mcedit fig.yml
 
     echo "You are ready to start the HDX environment!"
 else
