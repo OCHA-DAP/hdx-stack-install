@@ -1,3 +1,0 @@
-# copyleft 2015 teodorescu.serban@gmail.com
-
-envsubst < hdx-install/fig.tpl > fig.yml

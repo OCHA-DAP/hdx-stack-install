@@ -1,19 +1,27 @@
+#!/bin/bash
+
 # copyleft 2015 teodorescu.serban@gmail.com
 
-echo "Cloning the private HDX repo:"
+mypath="hdx-install"
+
 git clone https://hdx-user@bitbucket.org/teodorescuserban/hdx-install-private.git
 if [ $? -ne 0 ]; then
     echo "Private repo cloning failed! Start again!"
     exit 1
 fi
 echo "Done."
+
 echo "Please edit public vars."
 sleep 2
-mcedit hdx-install/set_vars
-source hdx-install/set_vars
+mcedit $mypath/set_vars
+source $mypath/set_vars
 source hdx-install-private/2b_set_prv_vars
-source hdx-install/stamp_fig
+
+envsubst < $mypath/fig.tpl > fig.yml
+
+source $mypath/stamp_fig
 echo "fig file created. inspect it."
 sleep 5
-mcedit fig.yml
+mcedit $mypath/fig.yml
+
 echo "You are ready to start the HDX environment!"

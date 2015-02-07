@@ -1,7 +1,17 @@
 # copyleft 2015 teodorescu.serban@gmail.com
 
+# update the system and install minimal required stuff
+apt-get -qq update;
+apt-get -qq upgrade;
+apt-get -qq -y install tmux mc gettext-base python-pip git
+
 # install latest docker
 curl -sSL https://get.docker.com/ubuntu/ | sudo sh
+
+# customize the docker aufs location
+mkdir -p /data
+echo "DOCKER_OPTS=\"-g /data/docker\"" >> /etc/default/docker
+restart docker
 
 # install docker tools
 curl --fail -L -O \
