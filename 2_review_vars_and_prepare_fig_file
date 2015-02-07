@@ -11,16 +11,21 @@ if [ $? -ne 0 ]; then
 fi
 echo "Done."
 
-echo "Please edit public vars."
-sleep 2
+echo "Please customize the public vars."
+echo "The prefix, http and https ports maybe?"
+echo "Starting mcedit for you in 5 seconds."
+sleep 5
 mcedit $mypath/set_vars
+
+echo "Good. Fig file will be created in 5 seconds"
+sleep 5
 source $mypath/set_vars
-source hdx-install-private/2b_set_prv_vars
-
+source hdx-install-private/set_private_vars
 envsubst < $mypath/fig.tpl > fig.yml
-
 source $mypath/stamp_fig
+
 echo "fig file created. inspect it."
+echo "Starting mcedit for you in 5 seconds."
 sleep 5
 mcedit $mypath/fig.yml
 
