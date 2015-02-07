@@ -1,28 +1,41 @@
 # copyleft 2015 teodorescu.serban@gmail.com
 
 # update the system and install minimal required stuff
+echo "Update the host system. Please wait."
 apt-get -qq update;
 apt-get -qq upgrade;
+echo "Done."
+echo "Install a few dependencies."
 apt-get -qq -y install tmux mc gettext-base python-pip git
+echo "Done."
 
 # install latest docker
-curl -sSL https://get.docker.com/ubuntu/ | sudo sh
-
+echo "Installing docker. Please wait."
+curl -sSL https://get.docker.com/ubuntu/ | sh >/dev/null
+echo "Done."
 # customize the docker aufs location
+echo "Change docker aufs location to /data/docker"
 mkdir -p /data
 echo "DOCKER_OPTS=\"-g /data/docker\"" >> /etc/default/docker
 restart docker
+echo "Done"
 
 # install docker tools
-curl --fail -L -O \
+echo "Install docker tools. Please wait."
+curl --fail -sL -O \
     https://github.com/phusion/baseimage-docker/archive/master.tar.gz
 tar xzf master.tar.gz
-./baseimage-docker-master/install-tools.sh
+./baseimage-docker-master/install-tools.sh > /dev/null
 rm -rf master.tar.gz
 rm -rf baseimage-docker-master
+echo "Done."
 
 # install fig (and pip if it's not yet installed)
+echo "Install pip. Please wait."
 which pip > /dev/null
-[ $? -eq 0 ] || apt-get install python-pip
+[ $? -eq 0 ] || apt-get install -qq -y python-pip
 
-pip install fig
+pip install fig > /dev/null
+echo "Done."
+
+echo "This step is complete (unless you saw an error). :)"
