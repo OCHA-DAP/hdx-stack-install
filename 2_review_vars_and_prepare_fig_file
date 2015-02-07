@@ -5,28 +5,29 @@
 mypath="hdx-install"
 
 git clone https://hdx-user@bitbucket.org/teodorescuserban/hdx-install-private.git
-if [ $? -ne 0 ]; then
+
+if [ $? -eq 0 ]; then
+    echo "Done."
+
+    echo "Please customize the public vars."
+    echo "The prefix, http and https ports maybe?"
+    echo "Starting mcedit for you in 5 seconds."
+    sleep 5
+    mcedit $mypath/set_vars
+
+    echo "Good. Fig file will be created in 5 seconds"
+    sleep 5
+    source $mypath/set_vars
+    source hdx-install-private/set_private_vars
+    envsubst < $mypath/fig.tpl > fig.yml
+    source $mypath/stamp_fig
+
+    echo "fig file created. inspect it."
+    echo "Starting mcedit for you in 5 seconds."
+    sleep 5
+    mcedit $mypath/fig.yml
+
+    echo "You are ready to start the HDX environment!"
+else
     echo "Private repo cloning failed! Start again!"
-    exit 1
 fi
-echo "Done."
-
-echo "Please customize the public vars."
-echo "The prefix, http and https ports maybe?"
-echo "Starting mcedit for you in 5 seconds."
-sleep 5
-mcedit $mypath/set_vars
-
-echo "Good. Fig file will be created in 5 seconds"
-sleep 5
-source $mypath/set_vars
-source hdx-install-private/set_private_vars
-envsubst < $mypath/fig.tpl > fig.yml
-source $mypath/stamp_fig
-
-echo "fig file created. inspect it."
-echo "Starting mcedit for you in 5 seconds."
-sleep 5
-mcedit $mypath/fig.yml
-
-echo "You are ready to start the HDX environment!"
