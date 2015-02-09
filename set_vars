@@ -18,8 +18,8 @@ $e HDX_DOMAIN=hdx.rwlabs.org
 $e HDX_PREFIX=
 $e HDX_TYPE=prod
 $e HDX_BASE_VOL_PATH=/data/volumes
-$e HDX_CPS_BRANCH=tag/v0.6.16
-$e HDX_CKAN_BRANCH=tag/v0.6.17
+$e HDX_CPS_BRANCH=tags/v0.6.16
+$e HDX_CKAN_BRANCH=tags/v0.6.17
 # --------------------------------
 $e HDX_HTTP_PORT=80
 $e HDX_HTTPS_PORT=443
