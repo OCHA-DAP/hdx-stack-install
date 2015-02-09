@@ -62,6 +62,7 @@ ckan:
   ports:
     - "${HDX_CKAN_ADDR}:${HDX_CKAN_PORT}:9221"
   environment:
+    - HDX_CKAN_BRANCH=${HDX_CKAN_BRANCH}
     - HDX_TYPE=${HDX_TYPE}
     - HDX_DOMAIN=${HDX_DOMAIN}
     - HDX_PREFIX=${HDX_PREFIX}
@@ -86,6 +87,7 @@ cps:
   ports:
     - "${HDX_CPS_ADDR}:${HDX_CPS_PORT}:8080"
   environment:
+    - HDX_CPS_BRANCH=${HDX_CPS_BRANCH}
     - HDX_DOMAIN=${HDX_DOMAIN}
     - HDX_PREFIX=${HDX_PREFIX}
     - HDX_FOLDER=${HDX_FOLDER}
