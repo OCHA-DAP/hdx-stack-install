@@ -6,7 +6,7 @@ apt-get -qq update;
 apt-get -qq upgrade;
 echo "Done."
 echo "Install a few dependencies."
-apt-get -qq -y install tmux mc gettext-base python-pip git
+apt-get -qq -y install tmux mc gettext-base python-pip git apparmor
 echo "Done."
 
 # install latest docker
