@@ -93,6 +93,8 @@ cps:
     - dbcps:db
   ports:
     - "${HDX_CPS_ADDR}:${HDX_CPS_PORT}:8080"
+  volumes:
+    - "${HDX_BASE_VOL_PATH}/backup:/srv/backup"
   environment:
     - HDX_CPS_BRANCH=${HDX_CPS_BRANCH}
     - HDX_TYPE=${HDX_TYPE}
