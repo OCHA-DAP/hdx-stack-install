@@ -40,6 +40,11 @@ dataproxy:
   ports:
     - "${HDX_DATAPROXY_ADDR}:${HDX_DATAPROXY_PORT}:9223"
 
+ogre:
+  image: ${HDX_IMG_BASE}ogre:latest
+  ports:
+    - "${HDX_OGRE_ADDR}:${HDX_OGRE_PORT}:3000"
+
 solr:
   image: ${HDX_IMG_BASE}solr:latest
   volumes:
