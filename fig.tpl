@@ -122,6 +122,7 @@ blog:
   ports:
     - "${HDX_BLOG_ADDR}:${HDX_BLOG_PORT}:9000"
   volumes:
+    - "${HDX_BASE_VOL_PATH}/backup:/srv/backup"
     - "${HDX_BASE_VOL_PATH}/www/docs:/srv/www/docs"
   environment:
     - HDX_DOMAIN=${HDX_DOMAIN}
