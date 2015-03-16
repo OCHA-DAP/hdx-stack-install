@@ -22,6 +22,8 @@ web:
     - HDX_CPS_PORT=${HDX_CPS_PORT}
     - HDX_DATAPROXY_ADDR=${HDX_DATAPROXY_ADDR}
     - HDX_DATAPROXY_PORT=${HDX_DATAPROXY_PORT}
+    - HDX_OGRE_ADDR=${HDX_OGRE_ADDR}
+    - HDX_OGRE_PORT=${HDX_OGRE_PORT}
 
 ################################################
 
