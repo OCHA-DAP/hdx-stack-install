@@ -9,6 +9,12 @@ echo "Install a few dependencies."
 apt-get -qq -y install tmux mc gettext-base python-pip git apparmor
 echo "Done."
 
+echo "Setting host's smtp to listen only to localhost and ipv4."
+postconf -e inet_interfaces=127.0.0.1
+postconf -e inet_protocols=ipv4
+invoke-rc.d postfix restart
+echo "Done."
+
 # install latest docker
 echo "Installing docker. Please wait."
 curl -sSL https://get.docker.com/ubuntu/ | sh >/dev/null
