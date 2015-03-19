@@ -32,7 +32,6 @@ then
 else
     echo "Skipped."
 fi
-echo "Complete!"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 
 echo "All done. Cleaning up."

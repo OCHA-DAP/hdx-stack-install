@@ -3,6 +3,12 @@ echo "If nginx container is mapped to other port than 81,"
 echo "you need to edit the file /etc/nginx/sites-available/hdx"
 echo "and change the port on proxy_pass line."
 
+echo "Removing default vhost link."
 rm -f /etc/nginx/sites-enabled/default > /dev/null
+echo "Copying hdx vhost file."
 cp hdx-install/nginx_hdx_conf /etc/nginx/sites-available/hdx
+echo "Activating it."
 ln -s /etc/nginx/sites-available/hdx /etc/nginx/sites-enabled/hdx
+echo "Reloading nginx."
+invoke-rc.d nginx reload
+echo "Done."
