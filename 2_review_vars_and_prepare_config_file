@@ -15,7 +15,7 @@ if [ $? -eq 0 ]; then
     sleep 5
     mcedit $mypath/set_vars
 
-    echo "Docker-compose configuration file will be created in 5 seconds"
+    echo "Creating docker-compose configuration file..."
     source $mypath/set_vars
     source hdx-install-private/set_private_vars
     envsubst < $mypath/docker-compose.tpl > docker-compose.yml
