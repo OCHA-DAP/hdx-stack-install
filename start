@@ -20,8 +20,22 @@ echo "Please hit Ctrl+C if you saw an error."
 echo "Otherwise I will proceed to the next step in 10 seconds."
 sleep 10
 
+
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-echo "Cleaning up."
+echo "Add the hdx vhost file to host nginx."
+
+read -p "Do you want to proceed? [y/<any>]? " -n 1 -r
+echo    # (optional) move to a new line
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    source hdx-install/3_nginx_hdx
+else
+    echo "Skipped."
+fi
+echo "Complete!"
+echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+
+echo "All done. Cleaning up."
 rm -rf hdx*
 echo "Done."
 

@@ -1,18 +1,8 @@
-server {
-        listen 80;
-        # default_server;
-        # listen 443 ssl;
-        # ssl_certificate     /etc/ssl/certs/hdx.rwlabs.org.crt;
-        # ssl_certificate_key /etc/ssl/private/hdx.rwlabs.org.key;
 
-        root /usr/share/nginx/html;
-        # index index.html index.htm;
+echo "If nginx container is mapped to other port than 81,"
+echo "you need to edit the file /etc/nginx/sites-available/hdx"
+echo "and change the port on proxy_pass line."
 
-        location / {
-                log_not_found off;
-                proxy_redirect off;
-                proxy_pass http://127.0.0.1:81;
-                include /etc/nginx/proxy_params;
-        }
-
-}
+rm -f /etc/nginx/sites-enabled/default > /dev/null
+cp hdx-install/nginx_hdx_conf /etc/nginx/sites-available/hdx
+ln -s /etc/nginx/sites-available/hdx /etc/nginx/sites-enabled/hdx
