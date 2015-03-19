@@ -15,17 +15,16 @@ if [ $? -eq 0 ]; then
     sleep 5
     mcedit $mypath/set_vars
 
-    echo "Good. Fig file will be created in 5 seconds"
+    echo "Good. Docker-compose configuration file will be created in 5 seconds"
     sleep 5
     source $mypath/set_vars
     source hdx-install-private/set_private_vars
-    envsubst < $mypath/fig.tpl > fig.yml
-    #source $mypath/stamp_fig
+    envsubst < $mypath/docker-compose.tpl > docker-compose.yml
 
-    echo "fig file created. inspect it."
+    echo "Done. Inspect it."
     echo "Starting mcedit for you in 5 seconds."
     sleep 5
-    mcedit fig.yml
+    mcedit docker-compose.yml
 
     echo "You are ready to start the HDX environment!"
 else
