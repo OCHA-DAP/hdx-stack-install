@@ -41,12 +41,3 @@ echo "Done."
 echo "Install docker compose bash completion."
 curl -sL https://raw.githubusercontent.com/docker/compose/1.1.0/contrib/completion/bash/docker-compose > /etc/bash_completion.d/docker-compose
 echo "Done."
-
-echo "Install and configure docker and docker-compose complete."
-echo "Please hit Ctrl+C if you saw an error."
-echo "Otherwise I will proceed to the next step in 10 seconds."
-sleep 10
-
-echo "Preparing for the the next step."
-chmod u+x /hdx/hdx-install/2_review_vars_and_prepare_config_file
-#exec /hdx/hdx-install/2_review_vars_and_prepare_config_file
