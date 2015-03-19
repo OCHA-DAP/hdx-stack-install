@@ -39,7 +39,7 @@ pip install docker-compose > /dev/null
 echo "Done."
 
 echo "Install docker compose bash completion."
-curl -L https://raw.githubusercontent.com/docker/compose/1.1.0/contrib/completion/bash/docker-compose > /etc/bash_completion.d/docker-compose
+curl -sL https://raw.githubusercontent.com/docker/compose/1.1.0/contrib/completion/bash/docker-compose > /etc/bash_completion.d/docker-compose
 echo "Done."
 
 echo "This step is complete (unless you saw an error). :)"
