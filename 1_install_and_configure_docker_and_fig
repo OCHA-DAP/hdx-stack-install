@@ -30,12 +30,16 @@ rm -rf master.tar.gz
 rm -rf baseimage-docker-master
 echo "Done."
 
-# install fig (and pip if it's not yet installed)
+# install docker compose (and pip if it's not yet installed)
 echo "Install pip. Please wait."
 which pip > /dev/null
 [ $? -eq 0 ] || apt-get install -qq -y python-pip
 
-pip install fig > /dev/null
+pip install docker-compose > /dev/null
+echo "Done."
+
+echo "Install docker compose bash completion."
+curl -L https://raw.githubusercontent.com/docker/compose/1.1.0/contrib/completion/bash/docker-compose > /etc/bash_completion.d/docker-compose
 echo "Done."
 
 echo "This step is complete (unless you saw an error). :)"
