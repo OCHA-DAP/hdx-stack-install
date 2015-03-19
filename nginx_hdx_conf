@@ -1,0 +1,18 @@
+server {
+        listen 80;
+        # default_server;
+        # listen 443 ssl;
+        # ssl_certificate     /etc/ssl/certs/hdx.rwlabs.org.crt;
+        # ssl_certificate_key /etc/ssl/private/hdx.rwlabs.org.key;
+
+        root /usr/share/nginx/html;
+        # index index.html index.htm;
+
+        location / {
+                log_not_found off;
+                proxy_redirect off;
+                proxy_pass http://127.0.0.1:81;
+                include /etc/nginx/proxy_params;
+        }
+
+}
