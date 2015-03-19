@@ -8,7 +8,7 @@ rm -f /etc/nginx/sites-enabled/default > /dev/null
 echo "Copying hdx vhost file."
 cp hdx-install/nginx_hdx_conf /etc/nginx/sites-available/hdx
 echo "Activating it."
-ln -s /etc/nginx/sites-available/hdx /etc/nginx/sites-enabled/hdx
+ln -sf /etc/nginx/sites-available/hdx /etc/nginx/sites-enabled/hdx
 echo "Reloading nginx."
 invoke-rc.d nginx reload
 echo "Done."
