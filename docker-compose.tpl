@@ -4,6 +4,8 @@
 
 web:
   image: ${HDX_IMG_BASE}nginx:latest
+  hostname: nginx
+  restart: always
   volumes:
      - "${HDX_BASE_VOL_PATH}/www:/srv/www"
      - "/var/log/nginx:/var/log/nginx"
@@ -29,36 +31,47 @@ web:
 
 email:
   image: ${HDX_IMG_BASE}email:latest
+  hostname: email
+  restart: always
   ports:
     - "${HDX_SMTP_ADDR}:${HDX_SMTP_PORT}:25"
   environment:
     - HDX_DKIM_KEY=${HDX_DKIM_KEY}
 
-
 ################################################
 
 dataproxy:
   image: ${HDX_IMG_BASE}dataproxy:latest
+  hostname: dataproxy
+  restart: always
   ports:
     - "${HDX_DATAPROXY_ADDR}:${HDX_DATAPROXY_PORT}:9223"
 
 ogre:
   image: ${HDX_IMG_BASE}ogre:latest
+  hostname: ogre
+  restart: always
   ports:
     - "${HDX_OGRE_ADDR}:${HDX_OGRE_PORT}:3000"
 
 solr:
   image: ${HDX_IMG_BASE}solr:latest
+  hostname: solr
+  restart: always
   volumes:
     - "${HDX_BASE_VOL_PATH}/solr:/srv/solr/example/solr/ckan/data"
 
 dbckan:
   image: ${HDX_IMG_BASE}psql-ckan:latest
+  hostname: dbckan
+  restart: always
   volumes:
     - "${HDX_BASE_VOL_PATH}/psql-ckan:/srv/db"
 
 ckan:
   image: ${HDX_IMG_BASE}ckan:latest
+  hostname: ckan
+  restart: always
   links:
     - dbckan:db
     - solr
@@ -84,11 +97,15 @@ ckan:
 
 dbcps:
   image: ${HDX_IMG_BASE}psql-cps:latest
+  hostname: dbcps
+  restart: always
   volumes:
     - "${HDX_BASE_VOL_PATH}/psql-cps:/srv/db"
 
 cps:
   image: ${HDX_IMG_BASE}cps:latest
+  hostname: cps
+  restart: always
   links:
     - dbcps:db
   ports:
@@ -112,11 +129,15 @@ cps:
 
 dbblog:
   image: ${HDX_IMG_BASE}mysql:latest
+  hostname: dbblog
+  restart: always
   volumes:
     - "${HDX_BASE_VOL_PATH}/mysql:/srv/db"
 
 blog:
   image: ${HDX_IMG_BASE}blog:latest
+  hostname: blog
+  restart: always
   links:
     - dbblog:db
   ports:
