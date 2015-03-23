@@ -8,7 +8,7 @@ web:
   restart: always
   volumes:
      - "${HDX_BASE_VOL_PATH}/www:/srv/www"
-     - "/var/log/nginx:/var/log/nginx"
+     - "${HDX_BASE_VOL_PATH}/log/nginx:/var/log/nginx"
   ports:
     - "${HDX_HTTP_PORT}:80"
     - "${HDX_HTTPS_PORT}:443"
@@ -33,6 +33,8 @@ email:
   image: ${HDX_IMG_BASE}email:latest
   hostname: email
   restart: always
+  volumes:
+     - "${HDX_BASE_VOL_PATH}/log/email:/var/log/email"
   ports:
     - "${HDX_SMTP_ADDR}:${HDX_SMTP_PORT}:25"
   environment:
@@ -67,6 +69,7 @@ dbckan:
   restart: always
   volumes:
     - "${HDX_BASE_VOL_PATH}/psql-ckan:/srv/db"
+    - "${HDX_BASE_VOL_PATH}/log/cps-psql:/var/log/psql"
 
 ckan:
   image: ${HDX_IMG_BASE}ckan:latest
@@ -78,7 +81,7 @@ ckan:
   volumes:
     - "${HDX_BASE_VOL_PATH}/backup:/srv/backup"
     - "${HDX_BASE_VOL_PATH}/filestore:/srv/filestore"
-    - "/var/log/ckan:/var/log/ckan"
+    - "${HDX_BASE_VOL_PATH}/log/ckan:/var/log/ckan"
   ports:
     - "${HDX_CKAN_ADDR}:${HDX_CKAN_PORT}:9221"
   environment:
@@ -101,6 +104,7 @@ dbcps:
   restart: always
   volumes:
     - "${HDX_BASE_VOL_PATH}/psql-cps:/srv/db"
+    - "${HDX_BASE_VOL_PATH}/log/cps-psql:/var/log/psql"
 
 cps:
   image: ${HDX_IMG_BASE}cps:latest
@@ -112,6 +116,7 @@ cps:
     - "${HDX_CPS_ADDR}:${HDX_CPS_PORT}:8080"
   volumes:
     - "${HDX_BASE_VOL_PATH}/backup:/srv/backup"
+    - "${HDX_BASE_VOL_PATH}/log/cps:${HDX_FOLDER}/logs"
   environment:
     - HDX_CPS_BRANCH=${HDX_CPS_BRANCH}
     - HDX_TYPE=${HDX_TYPE}
@@ -133,6 +138,7 @@ dbblog:
   restart: always
   volumes:
     - "${HDX_BASE_VOL_PATH}/mysql:/srv/db"
+    - "${HDX_BASE_VOL_PATH}/log/mysql-blog:${HDX_FOLDER}/mysql"
 
 blog:
   image: ${HDX_IMG_BASE}blog:latest
@@ -145,6 +151,7 @@ blog:
   volumes:
     - "${HDX_BASE_VOL_PATH}/backup:/srv/backup"
     - "${HDX_BASE_VOL_PATH}/www/docs:/srv/www/docs"
+    - "${HDX_BASE_VOL_PATH}/log/blog:${HDX_FOLDER}/blog"
   environment:
     - HDX_DOMAIN=${HDX_DOMAIN}
     - HDX_PREFIX=${HDX_PREFIX}
