@@ -1,4 +1,6 @@
 
+echo "Creating required directories if you were so lazy to NOT install nginx on the host yet..."
+mkdir -p /etc/nginx/sites-available /etc/nginx/sites-enabled
 echo "Removing default vhost link."
 rm -f /etc/nginx/sites-enabled/default > /dev/null
 echo "Constructing password file to restrict access."
