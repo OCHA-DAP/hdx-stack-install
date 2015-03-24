@@ -21,6 +21,35 @@ else
     echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 fi
 
+BASEPORT=9000
+CURPORT=$BASEPORT
+CONTAINERS=20
+ENDPORT=$((BASEPORT+CONTAINERS))
+BASEPORTFOUND=0
+echo "Searching unused port range..."
+while [  $BASEPORTFOUND -eq 0 ]; do
+    echo "Trying $BASEPORT - $ENDPORT ..."
+    for port in {$BASEPORT..$ENDPORT}; do
+        if [ $(netstat -lnt | grep -c $CURPORT) -ne 0 ]; then
+            echo "Port $CURPORT is already used... Skipping the entire port range."
+            NEWRANGE=1
+            break;
+        else
+            NEWRANGE=0
+        fi
+    done
+    if [ $NEWRANGE -eq 0 ]; then
+        echo "Unused port range found: $BASEPORT - $ENDPORT"
+        echo "We will use this port range to map our containers."
+        export HDX_BASEPORT=$BASEPORT
+        BASEPORTFOUND=1
+    else
+        BASEPORT=$((BASEPORT+=100))
+        CURPORT=$BASEPORT
+        ENDPORT=$((ENDPORT+=100))
+    fi
+done
+
 source hdx-install/2_review_vars_and_prepare_config_file
 
 echo "Complete!"
