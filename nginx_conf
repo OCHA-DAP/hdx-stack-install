@@ -1,5 +1,6 @@
 server {
         listen 80;
+        server_name ${HDX_PREFIX}.${HDX_DOMAIN} ${HDX_PREFIX}docs.${HDX_DOMAIN} ${HDX_PREFIX}data.${HDX_DOMAIN} ${HDX_PREFIX}manage.${HDX_DOMAIN}
         # default_server;
         # listen 443 ssl;
         # ssl_certificate     /etc/ssl/certs/hdx.rwlabs.org.crt;
@@ -9,10 +10,15 @@ server {
         # index index.html index.htm;
 
         location / {
+
+                include /etc/nginx/${HDX_TYPE}-restricted.conf;
                 log_not_found off;
+                try_files $uri @go_ahead;
+        }
+        location @go_ahead {
                 proxy_redirect off;
-                proxy_pass http://127.0.0.1:81;
+                proxy_pass http://127.0.0.1:${HDX_HTTP_PORT};
                 include /etc/nginx/proxy_params;
         }
-
+        include /etc/nginx/${HDX_TYPE}-bypass-location.conf;
 }

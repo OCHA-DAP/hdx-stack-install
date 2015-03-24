@@ -1,14 +1,16 @@
 
-echo "If nginx container is mapped to other port than 81,"
-echo "you need to edit the file /etc/nginx/sites-available/hdx"
-echo "and change the port on proxy_pass line."
-
 echo "Removing default vhost link."
 rm -f /etc/nginx/sites-enabled/default > /dev/null
+echo "Constructing password file to restrict access."
+echo ${HDX_NGINX_PASS} > /etc/nginx/${HDX_TYPE}_datapass
+echo "Creating the restricted include file."
+envsubst < hdx-install/nginx_restricted_conf > /etc/nginx/sites-available/${HDX_TYPE}-restricted.conf
+echo "Copy the bypass include file."
+envsubst < hdx-install/nginx_bypass_conf     > /etc/nginx/sites-available/${HDX_TYPE}-bypass-location.conf
 echo "Copying hdx vhost file."
-cp hdx-install/nginx_hdx_conf /etc/nginx/sites-available/hdx
+envsubst < hdx-install/nginx_conf            > /etc/nginx/sites-available/${HDX_TYPE}
 echo "Activating it."
-ln -sf /etc/nginx/sites-available/hdx /etc/nginx/sites-enabled/hdx
+ln -sf /etc/nginx/sites-available/${HDX_TYPE} /etc/nginx/sites-enabled/${HDX_TYPE}
 echo "Reloading nginx."
 invoke-rc.d nginx reload
 echo "Done."
