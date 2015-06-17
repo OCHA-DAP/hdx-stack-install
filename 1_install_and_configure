@@ -6,7 +6,7 @@ apt-get -qq update;
 apt-get -qq upgrade;
 echo "Done."
 echo "Install a few dependencies."
-apt-get -qq -y install tmux mc gettext-base python-pip git apparmor
+apt-get -qq -y install tmux mc gettext-base git apparmor
 echo "Done."
 
 echo "Setting host's smtp to listen only to localhost and ipv4."
@@ -14,6 +14,10 @@ postconf -e inet_interfaces=127.0.0.1
 postconf -e inet_protocols=ipv4
 invoke-rc.d postfix restart
 echo "Done."
+
+# install latest pip
+wget https://bootstrap.pypa.io/get-pip.py
+python get-pip.py
 
 # install latest docker
 echo "Installing docker. Please wait."
@@ -36,14 +40,11 @@ rm -rf master.tar.gz
 rm -rf baseimage-docker-master
 echo "Done."
 
-# install docker compose (and pip if it's not yet installed)
-echo "Install pip. Please wait."
-which pip > /dev/null
-[ $? -eq 0 ] || apt-get install -qq -y python-pip
+# install docker compose
+curl -L https://github.com/docker/compose/releases/download/1.2.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
 
-pip install docker-compose > /dev/null
-echo "Done."
 
 echo "Install docker compose bash completion."
-curl -sL https://raw.githubusercontent.com/docker/compose/1.1.0/contrib/completion/bash/docker-compose > /etc/bash_completion.d/docker-compose
+curl -sL https://raw.githubusercontent.com/docker/compose/1.2.0/contrib/completion/bash/docker-compose > /etc/bash_completion.d/docker-compose
 echo "Done."
