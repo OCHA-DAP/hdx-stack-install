@@ -4,17 +4,23 @@
 
 mypath="hdx-install"
 
-git clone https://hdx-user@bitbucket.org/teodorescuserban/hdx-install-private.git
+if [ -z $EDITOR ]; then
+  EDITOR=mcedit
+fi
+
+if [ ! -d hdx-install-private ]; then
+  git clone https://hdx-user@bitbucket.org/teodorescuserban/hdx-install-private.git
+fi
 
 if [ $? -eq 0 ]; then
     echo "Done."
 
     echo "Please customize the public vars."
     echo "The prefix, http and https ports maybe?"
-    echo "Starting mcedit for you in 20 seconds."
+    echo "Starting $EDITOR for you in 20 seconds."
     echo "Why so long? So you can read above!"
     sleep 20
-    mcedit $mypath/set_vars
+    $EDITOR $mypath/set_vars
 
     echo "Creating docker-compose configuration file..."
     source $mypath/set_vars
@@ -22,10 +28,10 @@ if [ $? -eq 0 ]; then
     envsubst < $mypath/docker-compose.tpl > docker-compose.yml
 
     echo "Done. Inspect it."
-    echo "Starting mcedit for you in 20 seconds."
+    echo "Starting $EDITOR for you in 20 seconds."
     echo "Why so long? So you can read above!"
     sleep 20
-    mcedit docker-compose.yml
+    $EDITOR docker-compose.yml
 
     # echo "You are ready to start the HDX environment!"
 else
