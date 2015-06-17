@@ -13,7 +13,7 @@ server {
 
                 include /etc/nginx/${HDX_TYPE}-restricted.conf;
                 log_not_found off;
-                try_files $uri @go_ahead;
+                try_files %uri @go_ahead;
         }
         location @go_ahead {
                 proxy_redirect off;

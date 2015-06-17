@@ -4,7 +4,7 @@ mkdir -p /etc/nginx/sites-available /etc/nginx/sites-enabled
 echo "Removing default vhost link."
 rm -f /etc/nginx/sites-enabled/default > /dev/null
 echo "Constructing password file to restrict access."
-echo ${HDX_NGINX_PASS} > /etc/nginx/${HDX_TYPE}_datapass
+echo ${HDX_NGINX_PASS} > /etc/nginx/${HDX_TYPE}-datapass
 echo "Creating the restricted include file."
 envsubst < hdx-install/nginx_restricted_conf > /etc/nginx/${HDX_TYPE}-restricted.conf
 echo "Copy the bypass include file."
