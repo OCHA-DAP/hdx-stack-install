@@ -44,6 +44,7 @@ email:
 
 gisapi:
   image: teodorescuserban/hdx-pgrestapi:latest
+  hostname: gisapi
   ports:
     - "${HDX_GISAPI_ADDR}:${HDX_GISAPI_PORT}:80"
     - "${HDX_GISAPI_DEBUG_ADDR}:${HDX_GISAPI_DEBUG_PORT}:5858"
@@ -52,6 +53,7 @@ gisapi:
 
 gislayer:
   image: teodorescuserban/hdx-gisrestlayer:latest
+  hostname: gislayer
   ports:
     - "${HDX_GISLAYER_ADDR}:${HDX_GISLAYER_PORT}:5000"
   links:
@@ -59,6 +61,7 @@ gislayer:
 
 gisdb:
   image: teodorescuserban/hdx-psql-gis:latest
+  hostname: gisdb
 
 ################################################
 dataproxy:
