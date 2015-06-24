@@ -29,7 +29,7 @@ BASEPORTFOUND=0
 echo "Searching unused port range..."
 while [  $BASEPORTFOUND -eq 0 ]; do
     echo "Trying $BASEPORT - $ENDPORT ..."
-    for port in {$BASEPORT..$ENDPORT}; do
+    for port in $(seq $BASEPORT $ENDPORT); do
         if [ $(netstat -lnt | grep -c $CURPORT) -ne 0 ]; then
             echo "Port $CURPORT is already used... Skipping the entire port range."
             NEWRANGE=1
