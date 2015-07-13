@@ -2,6 +2,17 @@
 
 ################################################
 
+varnish:
+  image: ${HDX_IMG_BASE}varnish:latest
+  hostname: varnish
+  restart: always
+  ports:
+    - "${HDX_HTTP_PORT}:80"
+  links:
+    - "web:web"
+  environment:
+    - HDX_HTTPS_REDIRECT=off # This will only be useful in BlackMesh prod (or AWS w/ SSL-terminating ELB)
+
 web:
   image: ${HDX_IMG_BASE}nginx:latest
   hostname: nginx
@@ -10,7 +21,6 @@ web:
      - "${HDX_BASE_VOL_PATH}/www:/srv/www"
      - "${HDX_BASE_VOL_PATH}/log/nginx:/var/log/nginx"
   ports:
-    - "${HDX_HTTP_PORT}:80"
     - "${HDX_HTTPS_PORT}:443"
   environment:
     - HDX_DOMAIN=${HDX_DOMAIN}
