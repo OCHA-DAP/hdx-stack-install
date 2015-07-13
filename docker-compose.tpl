@@ -55,7 +55,7 @@ email:
 ################################################
 
 gisapi:
-  image: teodorescuserban/hdx-pgrestapi:latest
+  image: ${HDX_IMG_BASE}pgrestapi:latest
   hostname: gisapi
   ports:
     - "${HDX_GISAPI_ADDR}:${HDX_GISAPI_PORT}:80"
@@ -64,14 +64,14 @@ gisapi:
     - "gisdb:db"
 
 gisredis:
-  image: teodorescuserban/hdx-redis:latest
+  image: ${HDX_IMG_BASE}redis:latest
   hostname: gisredis
   ports:
     - "${HDX_GISREDIS_ADDR}:${HDX_GIREDIS_PORT}:6379"
 
 
 gislayer:
-  image: teodorescuserban/hdx-gisrestlayer:latest
+  image: ${HDX_IMG_BASE}gisrestlayer:latest
   hostname: gislayer
   ports:
     - "${HDX_GISLAYER_ADDR}:${HDX_GISLAYER_PORT}:5000"
@@ -80,7 +80,7 @@ gislayer:
     - "gisredis:redis"
 
 gisdb:
-  image: teodorescuserban/hdx-psql-gis:latest
+  image: ${HDX_IMG_BASE}psql-gis:latest
   hostname: gisdb
 
 ################################################
