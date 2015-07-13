@@ -53,6 +53,13 @@ gisapi:
   links:
     - "gisdb:db"
 
+gisredis:
+  image: teodorescuserban/hdx-redis:latest
+  hostname: gisredis
+  ports:
+    - "${HDX_GISREDIS_ADDR}:${HDX_GIREDIS_PORT}:6379"
+
+
 gislayer:
   image: teodorescuserban/hdx-gisrestlayer:latest
   hostname: gislayer
@@ -60,6 +67,7 @@ gislayer:
     - "${HDX_GISLAYER_ADDR}:${HDX_GISLAYER_PORT}:5000"
   links:
     - "gisdb:db"
+    - "gisredis:redis"
 
 gisdb:
   image: teodorescuserban/hdx-psql-gis:latest
@@ -73,12 +81,12 @@ dataproxy:
   ports:
     - "${HDX_DATAPROXY_ADDR}:${HDX_DATAPROXY_PORT}:9223"
 
-ogre:
-  image: ${HDX_IMG_BASE}ogre:latest
-  hostname: ogre
-  restart: always
-  ports:
-    - "${HDX_OGRE_ADDR}:${HDX_OGRE_PORT}:3000"
+#ogre:
+#  image: ${HDX_IMG_BASE}ogre:latest
+#  hostname: ogre
+#  restart: always
+#  ports:
+#    - "${HDX_OGRE_ADDR}:${HDX_OGRE_PORT}:3000"
 
 solr:
   image: ${HDX_IMG_BASE}solr:latest
