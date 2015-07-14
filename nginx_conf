@@ -12,7 +12,7 @@ server {
 
         location / {
 
-                include /etc/nginx/${HDX_TYPE}-restricted.conf;
+                include /etc/nginx/${HDX_SHORT_PREFIX}-restricted.conf;
                 log_not_found off;
                 try_files %uri @go_ahead;
         }
@@ -21,5 +21,5 @@ server {
                 proxy_pass http://127.0.0.1:${HDX_HTTP_PORT};
                 include /etc/nginx/proxy_params;
         }
-        include /etc/nginx/${HDX_TYPE}-bypass-location.conf;
+        include /etc/nginx/${HDX_SHORT_PREFIX}-bypass-location.conf;
 }
