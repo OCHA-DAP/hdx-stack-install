@@ -69,8 +69,8 @@ gisapi:
 gisredis:
   image: ${HDX_IMG_BASE}redis:latest
   hostname: gisredis
-  ports:
-    - "${HDX_GISREDIS_ADDR}:${HDX_GIREDIS_PORT}:6379"
+#  ports:
+#    - "${HDX_GISREDIS_ADDR}:${HDX_GIREDIS_PORT}:6379"
 
 
 gislayer:
