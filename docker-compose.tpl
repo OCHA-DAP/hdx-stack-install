@@ -84,6 +84,8 @@ gislayer:
   environment:
     - HDX_CKAN_ADDR=${HDX_CKAN_ADDR}
     - HDX_CKAN_PORT=${HDX_CKAN_PORT}
+    - HDX_GISAPI_ADDR=${HDX_GISAPI_ADDR}
+    - HDX_GISAPI_PORT=${HDX_GISAPI_PORT}
     - HDX_GIS_API_KEY=${HDX_GIS_API_KEY}
 
 gisdb:
