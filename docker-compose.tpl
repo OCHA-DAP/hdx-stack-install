@@ -81,6 +81,10 @@ gislayer:
   links:
     - "gisdb:db"
     - "gisredis:redis"
+  environment:
+    - HDX_CKAN_ADDR=${HDX_CKAN_ADDR}
+    - HDX_CKAN_PORT=${HDX_CKAN_PORT}
+    - HDX_GIS_API_KEY=${HDX_GIS_API_KEY}
 
 gisdb:
   image: ${HDX_IMG_BASE}psql-gis:latest
@@ -135,6 +139,8 @@ ckan:
     - HDX_DOMAIN=${HDX_DOMAIN}
     - HDX_PREFIX=${HDX_PREFIX}
     - HDX_FILESTORE=/srv/filestore
+    - HDX_SMTP_ADDR=${HDX_SMTP_ADDR}
+    - HDX_SMTP_PORT=${HDX_SMTP_PORT}
     - HDX_GISLAYER_ADDR=${HDX_GISLAYER_ADDR}
     - HDX_GISLAYER_PORT=${HDX_GISLAYER_PORT}
     - HDX_CKAN_RECAPTCHA_KEY=${HDX_CKAN_RECAPTCHA_KEY}
