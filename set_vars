@@ -21,6 +21,7 @@ $e HDX_BASE_VOL_PATH=/data/volumes
 $e HDX_CPS_BRANCH=tags/v0.7.3
 $e HDX_CKAN_BRANCH=tags/v0.9.5
 # --------------------------------
+$e HDX_VARNISH_HTTP_PORT=$HDX_BASEPORT
 $e HDX_HTTP_PORT=$((HDX_BASEPORT+1))
 $e HDX_HTTPS_PORT=$((HDX_BASEPORT+2))
 # --------------------------------
