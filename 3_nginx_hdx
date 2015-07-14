@@ -1,5 +1,5 @@
 
-export HDX_SHORT_PREFIX=$(echo $HDX_PREFIX | sed 's/-$/./')
+export HDX_SHORT_PREFIX=$(echo $HDX_PREFIX | sed 's/-$//')
 echo "Creating required directories if you were so lazy to NOT install nginx on the host yet..."
 mkdir -p /etc/nginx/sites-available /etc/nginx/sites-enabled
 echo "Removing default vhost link."
@@ -7,11 +7,11 @@ rm -f /etc/nginx/sites-enabled/default > /dev/null
 echo "Constructing password file to restrict access."
 echo ${HDX_NGINX_PASS} > /etc/nginx/${HDX_SHORT_PREFIX}-datapass
 echo "Creating the restricted include file."
-envsubst < hdx-install/nginx_restricted_conf > /etc/nginx/${HDX_SHORT_PREFIX}restricted.conf
-sed -i 's/%/$/g' /etc/nginx/${HDX_SHORT_PREFIX}restricted.conf
+envsubst < hdx-install/nginx_restricted_conf > /etc/nginx/${HDX_SHORT_PREFIX}-restricted.conf
+sed -i 's/%/$/g' /etc/nginx/${HDX_SHORT_PREFIX}-restricted.conf
 echo "Copy the bypass include file."
-envsubst < hdx-install/nginx_bypass_conf     > /etc/nginx/${HDX_SHORT_PREFIX}bypass-location.conf
-sed -i 's/%/$/g' /etc/nginx/${HDX_SHORT_PREFIX}bypass-location.conf
+envsubst < hdx-install/nginx_bypass_conf     > /etc/nginx/${HDX_SHORT_PREFIX}-bypass-location.conf
+sed -i 's/%/$/g' /etc/nginx/${HDX_SHORT_PREFIX}-bypass-location.conf
 echo "Copying hdx vhost file."
 envsubst < hdx-install/nginx_conf            > /etc/nginx/sites-available/${HDX_SHORT_PREFIX}
 sed -i 's/%/$/g' /etc/nginx/sites-available/${HDX_SHORT_PREFIX}
