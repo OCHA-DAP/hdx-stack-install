@@ -69,9 +69,6 @@ gisapi:
 gisredis:
   image: ${HDX_IMG_BASE}redis:latest
   hostname: gisredis
-#  ports:
-#    - "${HDX_GISREDIS_ADDR}:${HDX_GIREDIS_PORT}:6379"
-
 
 gislayer:
   image: ${HDX_IMG_BASE}gislayer:latest
@@ -81,16 +78,19 @@ gislayer:
   links:
     - "gisdb:db"
     - "gisredis:redis"
+  extra-hosts:
+    - "${HDX_PREFIX}data.${HDX_DOMAIN}:${HDX_DOCKER_ADDR}"
   environment:
-    - HDX_CKAN_ADDR=${HDX_CKAN_ADDR}
-    - HDX_CKAN_PORT=${HDX_CKAN_PORT}
-    - HDX_GISAPI_ADDR=${HDX_GISAPI_ADDR}
-    - HDX_GISAPI_PORT=${HDX_GISAPI_PORT}
+    - HDX_PREFIX=${HDX_PREFIX}
+    - HDX_DOMAIN=${HDX_DOMAIN}
     - HDX_GIS_API_KEY=${HDX_GIS_API_KEY}
 
 gisdb:
   image: ${HDX_IMG_BASE}psql-gis:latest
   hostname: gisdb
+  volumes:
+    - "${HDX_BASE_VOL_PATH}/psql-gis:/srv/db"
+    - "${HDX_BASE_VOL_PATH}/log/gis-psql:/var/log/psql"
 
 ################################################
 dataproxy:
@@ -120,7 +120,7 @@ dbckan:
   restart: always
   volumes:
     - "${HDX_BASE_VOL_PATH}/psql-ckan:/srv/db"
-    - "${HDX_BASE_VOL_PATH}/log/cps-psql:/var/log/psql"
+    - "${HDX_BASE_VOL_PATH}/log/ckan-psql:/var/log/psql"
 
 ckan:
   image: ${HDX_IMG_BASE}ckan:latest
@@ -172,6 +172,8 @@ cps:
   volumes:
     - "${HDX_BASE_VOL_PATH}/backup:/srv/backup"
     - "${HDX_BASE_VOL_PATH}/log/cps:${HDX_FOLDER}/logs"
+  extra_hosts:
+    - "somehost:10.10.10.10"
   environment:
     - HDX_CPS_BRANCH=${HDX_CPS_BRANCH}
     - HDX_TYPE=${HDX_TYPE}

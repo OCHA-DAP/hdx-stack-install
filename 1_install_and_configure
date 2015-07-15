@@ -41,10 +41,10 @@ rm -rf baseimage-docker-master
 echo "Done."
 
 # install docker compose
-curl -L https://github.com/docker/compose/releases/download/1.2.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+curl -L https://github.com/docker/compose/releases/download/1.3.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
 
 echo "Install docker compose bash completion."
-curl -sL https://raw.githubusercontent.com/docker/compose/1.2.0/contrib/completion/bash/docker-compose > /etc/bash_completion.d/docker-compose
+curl -sL https://raw.githubusercontent.com/docker/compose/1.3.1/contrib/completion/bash/docker-compose > /etc/bash_completion.d/docker-compose
 echo "Done."
