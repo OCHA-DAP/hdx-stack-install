@@ -78,7 +78,7 @@ gislayer:
   links:
     - "gisdb:db"
     - "gisredis:redis"
-  extra-hosts:
+  extra_hosts:
     - "${HDX_PREFIX}data.${HDX_DOMAIN}:${HDX_DOCKER_ADDR}"
   environment:
     - HDX_PREFIX=${HDX_PREFIX}
