@@ -85,6 +85,19 @@ gislayer:
     - HDX_DOMAIN=${HDX_DOMAIN}
     - HDX_GIS_API_KEY=${HDX_GIS_API_KEY}
 
+gisworker:
+  image: ${HDX_IMG_BASE}gisworker:latest
+  hostname: gisworker
+  links:
+    - "gisdb:db"
+    - "gisredis:redis"
+  extra_hosts:
+    - "${HDX_PREFIX}data.${HDX_DOMAIN}:${HDX_DOCKER_ADDR}"
+  environment:
+    - HDX_PREFIX=${HDX_PREFIX}
+    - HDX_DOMAIN=${HDX_DOMAIN}
+    - HDX_GIS_API_KEY=${HDX_GIS_API_KEY}
+
 gisdb:
   image: ${HDX_IMG_BASE}psql-gis:latest
   hostname: gisdb
