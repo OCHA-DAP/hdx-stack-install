@@ -58,7 +58,7 @@ email:
 ################################################
 
 gisapi:
-  image: ${HDX_IMG_BASE}api:latest
+  image: ${HDX_IMG_BASE}gisapi:latest
   hostname: gisapi
   ports:
     - "${HDX_GISAPI_ADDR}:${HDX_GISAPI_PORT}:80"
