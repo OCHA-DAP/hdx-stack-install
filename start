@@ -51,6 +51,7 @@ while [  $BASEPORTFOUND -eq 0 ]; do
 done
 
 source hdx-install/2_review_vars_and_prepare_config_file
+cp -a hdx-install/docker-compose.yml .
 
 echo "Complete!"
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
@@ -76,6 +77,8 @@ echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "All done. Cleaning up."
 rm -rf hdx*
 echo "Done."
+
+echo "Please comment out the services you won't need in the docker-compose.yml file."
 
 echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "You are ready to start the HDX environment!"

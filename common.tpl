@@ -41,8 +41,6 @@ web:
     - HDX_GISAPI_PORT=${HDX_GISAPI_PORT}
     - HDX_GISLAYER_ADDR=${HDX_GISLAYER_ADDR}
     - HDX_GISLAYER_PORT=${HDX_GISLAYER_PORT}
-#    - HDX_OGRE_ADDR=${HDX_OGRE_ADDR}
-#    - HDX_OGRE_PORT=${HDX_OGRE_PORT}
 
 ################################################
 
@@ -65,8 +63,13 @@ gisapi:
   ports:
     - "${HDX_GISAPI_ADDR}:${HDX_GISAPI_PORT}:80"
     - "${HDX_GISAPI_DEBUG_ADDR}:${HDX_GISAPI_DEBUG_PORT}:5858"
-  links:
-    - "gisdb:db"
+#  links:
+#    - "gisdb:db"
+  extra_hosts:
+    - "${HDX_GISDB_ADDR}: db"
+  environment:
+    - HDX_GISDB_ADDR=${HDX_GISDB_ADDR}
+    - HDX_GISDB_PORT=${HDX_GISDB_PORT}
 
 gisredis:
   image: ${HDX_IMG_BASE}redis:latest
@@ -78,11 +81,14 @@ gislayer:
   ports:
     - "${HDX_GISLAYER_ADDR}:${HDX_GISLAYER_PORT}:5000"
   links:
-    - "gisdb:db"
+#    - "gisdb:db"
     - "gisredis:redis"
   extra_hosts:
     - "${HDX_PREFIX}data.${HDX_DOMAIN}:${HDX_DOCKER_ADDR}"
+    - "${HDX_GISDB_ADDR}: db"
   environment:
+    - HDX_GISDB_ADDR=${HDX_GISDB_ADDR}
+    - HDX_GISDB_PORT=${HDX_GISDB_PORT}
     - HDX_PREFIX=${HDX_PREFIX}
     - HDX_DOMAIN=${HDX_DOMAIN}
     - HDX_GIS_API_KEY=${HDX_GIS_API_KEY}
@@ -91,11 +97,14 @@ gisworker:
   image: ${HDX_IMG_BASE}gisworker:latest
   hostname: gisworker
   links:
-    - "gisdb:db"
+#    - "gisdb:db"
     - "gisredis:redis"
   extra_hosts:
     - "${HDX_PREFIX}data.${HDX_DOMAIN}:${HDX_DOCKER_ADDR}"
+    - "${HDX_GISDB_ADDR}: db"
   environment:
+    - HDX_GISDB_ADDR=${HDX_GISDB_ADDR}
+    - HDX_GISDB_PORT=${HDX_GISDB_PORT}
     - HDX_PREFIX=${HDX_PREFIX}
     - HDX_DOMAIN=${HDX_DOMAIN}
     - HDX_GIS_API_KEY=${HDX_GIS_API_KEY}
@@ -114,13 +123,9 @@ dataproxy:
   restart: always
   ports:
     - "${HDX_DATAPROXY_ADDR}:${HDX_DATAPROXY_PORT}:9223"
-
-#ogre:
-#  image: ${HDX_IMG_BASE}ogre:latest
-#  hostname: ogre
-#  restart: always
-#  ports:
-#    - "${HDX_OGRE_ADDR}:${HDX_OGRE_PORT}:3000"
+  extra_hosts:
+    - "${HDX_PREFIX}data.${HDX_DOMAIN}:${HDX_WB_ADDR}"
+    - "${HDX_PREFIX}manage.${HDX_DOMAIN}:${HDX_WB_ADDR}"
 
 solr:
   image: ${HDX_IMG_BASE}solr:latest
@@ -141,15 +146,21 @@ ckan:
   image: ${HDX_IMG_BASE}ckan:latest
   hostname: ckan
   restart: always
-  links:
-    - dbckan:db
-    - solr
+#  links:
+#    - dbckan:db
+#    - solr
   volumes:
     - "${HDX_BASE_VOL_PATH}/backup:/srv/backup"
     - "${HDX_BASE_VOL_PATH}/filestore:/srv/filestore"
     - "${HDX_BASE_VOL_PATH}/log/ckan:/var/log/ckan"
   ports:
     - "${HDX_CKAN_ADDR}:${HDX_CKAN_PORT}:9221"
+  extra_hosts:
+    - "${HDX_PREFIX}docs.${HDX_DOMAIN}:${HDX_WB_ADDR}"
+    - "${HDX_PREFIX}data.${HDX_DOMAIN}:${HDX_WB_ADDR}"
+    - "${HDX_PREFIX}manage.${HDX_DOMAIN}:${HDX_WB_ADDR}"
+    - "${HDX_CKANDB_ADDR}: db"
+    - "${HDX_SOLR_ADDR}: solr"
   environment:
     - HDX_CKAN_BRANCH=${HDX_CKAN_BRANCH}
     - HDX_TYPE=${HDX_TYPE}
@@ -166,6 +177,11 @@ ckan:
     - HDX_BACKUP_BASE_DIR=${HDX_BACKUP_BASE_DIR}
     - HDX_SSH_KEY=${HDX_SSH_KEY}
     - HDX_SSH_PUB=${HDX_SSH_PUB}
+    - HDX_SOLR_ADDR=${HDX_SOLR_ADDR}
+    - HDX_SOLR_PORT=${HDX_SOLR_PORT}
+    - HDX_CKANDB_ADDR=${HDX_CKANDB_ADDR}
+    - HDX_CKANDB_PORT=${HDX_CKANDB_PORT}
+
 ################################################
 
 dbcps:
@@ -180,15 +196,18 @@ cps:
   image: ${HDX_IMG_BASE}cps:latest
   hostname: cps
   restart: always
-  links:
-    - dbcps:db
+#  links:
+#    - dbcps:db
   ports:
     - "${HDX_CPS_ADDR}:${HDX_CPS_PORT}:8080"
   volumes:
     - "${HDX_BASE_VOL_PATH}/backup:/srv/backup"
     - "${HDX_BASE_VOL_PATH}/log/cps:${HDX_FOLDER}/logs"
   extra_hosts:
-    - "somehost:10.10.10.10"
+    - "${HDX_PREFIX}docs.${HDX_DOMAIN}:${HDX_WB_ADDR}"
+    - "${HDX_PREFIX}data.${HDX_DOMAIN}:${HDX_WB_ADDR}"
+    - "${HDX_PREFIX}manage.${HDX_DOMAIN}:${HDX_WB_ADDR}"
+    - "${HDX_CPSDB_ADDR}: db"
   environment:
     - HDX_CPS_BRANCH=${HDX_CPS_BRANCH}
     - HDX_TYPE=${HDX_TYPE}
@@ -201,6 +220,8 @@ cps:
     - HDX_BACKUP_BASE_DIR=${HDX_BACKUP_BASE_DIR}
     - HDX_SSH_KEY=${HDX_SSH_KEY}
     - HDX_SSH_PUB=${HDX_SSH_PUB}
+    - HDX_CPSDB_ADDR=${HDX_CPSDB_ADDR}
+    - HDX_CPSDB_PORT=${HDX_CPSDB_PORT}
 
 ################################################
 
@@ -216,14 +237,19 @@ blog:
   image: ${HDX_IMG_BASE}blog:latest
   hostname: blog
   restart: always
-  links:
-    - dbblog:db
+#  links:
+#    - dbblog:db
   ports:
     - "${HDX_BLOG_ADDR}:${HDX_BLOG_PORT}:9000"
   volumes:
     - "${HDX_BASE_VOL_PATH}/backup:/srv/backup"
     - "${HDX_BASE_VOL_PATH}/www/docs:/srv/www/docs"
     - "${HDX_BASE_VOL_PATH}/log/blog:${HDX_FOLDER}/blog"
+  extra_hosts:
+    - "${HDX_PREFIX}docs.${HDX_DOMAIN}:${HDX_WB_ADDR}"
+    - "${HDX_PREFIX}data.${HDX_DOMAIN}:${HDX_WB_ADDR}"
+    - "${HDX_PREFIX}manage.${HDX_DOMAIN}:${HDX_WB_ADDR}"
+    - "${HDX_BLOGDB_ADDR}: db"
   environment:
     - HDX_DOMAIN=${HDX_DOMAIN}
     - HDX_PREFIX=${HDX_PREFIX}
@@ -232,5 +258,7 @@ blog:
     - HDX_BACKUP_BASE_DIR=${HDX_BACKUP_BASE_DIR}
     - HDX_SSH_KEY=${HDX_SSH_KEY}
     - HDX_SSH_PUB=${HDX_SSH_PUB}
+    - HDX_BLOGDB_ADDR=${HDX_BLOGDB_ADDR}
+    - HDX_BLOGDB_PORT=${HDX_BLOGDB_PORT}
 
 ################################################
