@@ -17,9 +17,7 @@ if [ $? -eq 0 ]; then
 
     echo "Please customize the public vars."
     echo "The prefix, http and https ports maybe?"
-    echo "Starting $EDITOR for you in 20 seconds."
-    echo "Why so long? So you can read above!"
-    sleep 20
+    read -p "Press any key to start $EDITOR " -n 1 -r
     $EDITOR $mypath/set_vars
 
     echo "Creating docker-compose configuration file..."
@@ -28,9 +26,7 @@ if [ $? -eq 0 ]; then
     envsubst < $mypath/common.tpl > common.yml
 
     echo "Done. Inspect it."
-    echo "Starting $EDITOR for you in 20 seconds."
-    echo "Why so long? So you can read above!"
-    sleep 20
+    read -p "Press any key to start $EDITOR " -n 1 -r
     $EDITOR common.yml
 
     # echo "You are ready to start the HDX environment!"

@@ -86,7 +86,7 @@ gislayer:
 #    - "gisdb:db"
 #    - "gisredis:redis"
   extra_hosts:
-    - "${HDX_PREFIX}data.${HDX_DOMAIN}:${HDX_DOCKER_ADDR}"
+    - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
 #    - "${HDX_GISDB_ADDR}: db"
   environment:
     - HDX_GISDB_ADDR=${HDX_GISDB_ADDR}
@@ -104,7 +104,7 @@ gisworker:
 #    - "gisdb:db"
 #    - "gisredis:redis"
   extra_hosts:
-    - "${HDX_PREFIX}data.${HDX_DOMAIN}:${HDX_DOCKER_ADDR}"
+    - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
 #    - "${HDX_GISDB_ADDR}: db"
   environment:
     - HDX_GISDB_ADDR=${HDX_GISDB_ADDR}
@@ -132,8 +132,8 @@ dataproxy:
   ports:
     - "${HDX_DATAPROXY_ADDR}:${HDX_DATAPROXY_PORT}:9223"
   extra_hosts:
-    - "${HDX_PREFIX}data.${HDX_DOMAIN}:${HDX_WB_ADDR}"
-    - "${HDX_PREFIX}manage.${HDX_DOMAIN}:${HDX_WB_ADDR}"
+    - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
+    - "${HDX_PREFIX}manage.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
 
 solr:
   image: ${HDX_IMG_BASE}solr:latest
@@ -168,9 +168,9 @@ ckan:
   ports:
     - "${HDX_CKAN_ADDR}:${HDX_CKAN_PORT}:9221"
   extra_hosts:
-    - "${HDX_PREFIX}docs.${HDX_DOMAIN}:${HDX_WB_ADDR}"
-    - "${HDX_PREFIX}data.${HDX_DOMAIN}:${HDX_WB_ADDR}"
-    - "${HDX_PREFIX}manage.${HDX_DOMAIN}:${HDX_WB_ADDR}"
+    - "${HDX_PREFIX}docs.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
+    - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
+    - "${HDX_PREFIX}manage.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
 #    - "${HDX_CKANDB_ADDR}: db"
 #    - "${HDX_SOLR_ADDR}: solr"
   environment:
@@ -218,9 +218,9 @@ cps:
     - "${HDX_BASE_VOL_PATH}/backup:/srv/backup"
     - "${HDX_BASE_VOL_PATH}/log/cps:${HDX_FOLDER}/logs"
   extra_hosts:
-    - "${HDX_PREFIX}docs.${HDX_DOMAIN}:${HDX_WB_ADDR}"
-    - "${HDX_PREFIX}data.${HDX_DOMAIN}:${HDX_WB_ADDR}"
-    - "${HDX_PREFIX}manage.${HDX_DOMAIN}:${HDX_WB_ADDR}"
+    - "${HDX_PREFIX}docs.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
+    - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
+    - "${HDX_PREFIX}manage.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
   environment:
     - HDX_CPS_BRANCH=${HDX_CPS_BRANCH}
     - HDX_TYPE=${HDX_TYPE}
@@ -259,9 +259,9 @@ blog:
     - "${HDX_BASE_VOL_PATH}/www/docs:/srv/www/docs"
     - "${HDX_BASE_VOL_PATH}/log/blog:${HDX_FOLDER}/blog"
   extra_hosts:
-    - "${HDX_PREFIX}docs.${HDX_DOMAIN}:${HDX_WB_ADDR}"
-    - "${HDX_PREFIX}data.${HDX_DOMAIN}:${HDX_WB_ADDR}"
-    - "${HDX_PREFIX}manage.${HDX_DOMAIN}:${HDX_WB_ADDR}"
+    - "${HDX_PREFIX}docs.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
+    - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
+    - "${HDX_PREFIX}manage.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
     - "${HDX_BLOGDB_ADDR}: db"
   environment:
     - HDX_DOMAIN=${HDX_DOMAIN}
