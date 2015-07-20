@@ -245,6 +245,8 @@ dbblog:
   volumes:
     - "${HDX_BASE_VOL_PATH}/mysql:/srv/db"
     - "${HDX_BASE_VOL_PATH}/log/mysql-blog:${HDX_FOLDER}/mysql"
+  ports:
+    - "${HDX_BLOGDB_ADDR}:${HDX_BLOGDB_PORT}:3306"
 
 blog:
   image: ${HDX_IMG_BASE}blog:latest
