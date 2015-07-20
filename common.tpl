@@ -280,5 +280,8 @@ blog:
     - HDX_SSH_PUB=${HDX_SSH_PUB}
     - HDX_BLOGDB_ADDR=${HDX_BLOGDB_ADDR}
     - HDX_BLOGDB_PORT=${HDX_BLOGDB_PORT}
+    - HDX_BLOGDB_DB="blog"
+    - HDX_BLOGDB_USER="blog"
+    - HDX_BLOGDB_PASS="blog"
 
 ################################################
