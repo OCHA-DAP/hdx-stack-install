@@ -7,7 +7,7 @@ varnish:
   hostname: varnish
   restart: always
   ports:
-    - "${HDX_VARNISH_HTTP_PORT}:80"
+    - "${HDX_WB_ADDR}:${HDX_VARNISH_HTTP_PORT}:80"
 #  links:
 #    - "web:web"
   environment:
@@ -23,8 +23,8 @@ web:
      - "${HDX_BASE_VOL_PATH}/www:/srv/www"
      - "${HDX_BASE_VOL_PATH}/log/nginx:/var/log/nginx"
   ports:
-    - "${HDX_HTTP_PORT}:80"
-    - "${HDX_HTTPS_PORT}:443"
+    - "${HDX_WB_ADDR}:${HDX_HTTP_PORT}:80"
+    - "${HDX_WB_ADDR}:${HDX_HTTPS_PORT}:443"
   environment:
     - HDX_DOMAIN=${HDX_DOMAIN}
     - HDX_PREFIX=${HDX_PREFIX}
