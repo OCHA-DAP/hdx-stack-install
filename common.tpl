@@ -231,6 +231,8 @@ cps:
     - HDX_PREFIX=${HDX_PREFIX}
     - HDX_FOLDER=${HDX_FOLDER}
     - HDX_CKAN_API_KEY=${HDX_CKAN_API_KEY}
+    - HDX_SMTP_ADDR=${HDX_SMTP_ADDR}
+    - HDX_SMTP_PORT=${HDX_SMTP_PORT}
     - HDX_BACKUP_SERVER=${HDX_BACKUP_SERVER}
     - HDX_BACKUP_USER=${HDX_BACKUP_USER}
     - HDX_BACKUP_BASE_DIR=${HDX_BACKUP_BASE_DIR}
@@ -238,8 +240,9 @@ cps:
     - HDX_SSH_PUB=${HDX_SSH_PUB}
     - HDX_CPSDB_ADDR=${HDX_CPSDB_ADDR}
     - HDX_CPSDB_PORT=${HDX_CPSDB_PORT}
-    - HDX_SMTP_ADDR=${HDX_SMTP_ADDR}
-    - HDX_SMTP_PORT=${HDX_SMTP_PORT}
+    - HDX_CPSDB_DB=cps
+    - HDX_CPSDB_USER=cps
+    - HDX_CPSDB_PASS=cps
 
 ################################################
 
@@ -280,8 +283,8 @@ blog:
     - HDX_SSH_PUB=${HDX_SSH_PUB}
     - HDX_BLOGDB_ADDR=${HDX_BLOGDB_ADDR}
     - HDX_BLOGDB_PORT=${HDX_BLOGDB_PORT}
-    - HDX_BLOGDB_DB="blog"
-    - HDX_BLOGDB_USER="blog"
-    - HDX_BLOGDB_PASS="blog"
+    - HDX_BLOGDB_DB=blog
+    - HDX_BLOGDB_USER=blog
+    - HDX_BLOGDB_PASS=blog
 
 ################################################

@@ -18,7 +18,7 @@ server {
         }
         location @go_ahead {
                 proxy_redirect off;
-                proxy_pass http://127.0.0.1:${HDX_HTTP_PORT};
+                proxy_pass http://${HDX_WB_ADDR}:${HDX_HTTP_PORT};
                 include /etc/nginx/proxy_params;
         }
         include /etc/nginx/${HDX_SHORT_PREFIX}-bypass-location.conf;
