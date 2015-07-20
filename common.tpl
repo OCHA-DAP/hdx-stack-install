@@ -65,8 +65,8 @@ gisapi:
     - "${HDX_GISAPI_DEBUG_ADDR}:${HDX_GISAPI_DEBUG_PORT}:5858"
 #  links:
 #    - "gisdb:db"
-  extra_hosts:
-    - "${HDX_GISDB_ADDR}: db"
+#  extra_hosts:
+#    - "${HDX_GISDB_ADDR}: db"
   environment:
     - HDX_GISDB_ADDR=${HDX_GISDB_ADDR}
     - HDX_GISDB_PORT=${HDX_GISDB_PORT}
@@ -74,21 +74,25 @@ gisapi:
 gisredis:
   image: ${HDX_IMG_BASE}redis:latest
   hostname: gisredis
+  ports:
+    - "${HDX_GISREDIS_ADDR}:${HDX_GISREDIS_PORT}:6379"
 
 gislayer:
   image: ${HDX_IMG_BASE}gislayer:latest
   hostname: gislayer
   ports:
     - "${HDX_GISLAYER_ADDR}:${HDX_GISLAYER_PORT}:5000"
-  links:
+#  links:
 #    - "gisdb:db"
-    - "gisredis:redis"
+#    - "gisredis:redis"
   extra_hosts:
     - "${HDX_PREFIX}data.${HDX_DOMAIN}:${HDX_DOCKER_ADDR}"
-    - "${HDX_GISDB_ADDR}: db"
+#    - "${HDX_GISDB_ADDR}: db"
   environment:
     - HDX_GISDB_ADDR=${HDX_GISDB_ADDR}
     - HDX_GISDB_PORT=${HDX_GISDB_PORT}
+    - HDX_GISREDIS_ADDR=${HDX_GISREDIS_ADDR}
+    - HDX_GISREDIS_PORT=${HDX_GISREDIS_PORT}
     - HDX_PREFIX=${HDX_PREFIX}
     - HDX_DOMAIN=${HDX_DOMAIN}
     - HDX_GIS_API_KEY=${HDX_GIS_API_KEY}
@@ -96,15 +100,17 @@ gislayer:
 gisworker:
   image: ${HDX_IMG_BASE}gisworker:latest
   hostname: gisworker
-  links:
+#  links:
 #    - "gisdb:db"
-    - "gisredis:redis"
+#    - "gisredis:redis"
   extra_hosts:
     - "${HDX_PREFIX}data.${HDX_DOMAIN}:${HDX_DOCKER_ADDR}"
-    - "${HDX_GISDB_ADDR}: db"
+#    - "${HDX_GISDB_ADDR}: db"
   environment:
     - HDX_GISDB_ADDR=${HDX_GISDB_ADDR}
     - HDX_GISDB_PORT=${HDX_GISDB_PORT}
+    - HDX_GISREDIS_ADDR=${HDX_GISREDIS_ADDR}
+    - HDX_GISREDIS_PORT=${HDX_GISREDIS_PORT}
     - HDX_PREFIX=${HDX_PREFIX}
     - HDX_DOMAIN=${HDX_DOMAIN}
     - HDX_GIS_API_KEY=${HDX_GIS_API_KEY}
@@ -115,6 +121,8 @@ gisdb:
   volumes:
     - "${HDX_BASE_VOL_PATH}/psql-gis:/srv/db"
     - "${HDX_BASE_VOL_PATH}/log/gis-psql:/var/log/psql"
+  ports:
+    - "${HDX_GISDB_ADDR}:${HDX_GISDB_PORT}:5432"
 
 ################################################
 dataproxy:
@@ -133,6 +141,8 @@ solr:
   restart: always
   volumes:
     - "${HDX_BASE_VOL_PATH}/solr:/srv/solr/example/solr/ckan/data"
+  ports:
+    - "${HDX_SOLR_ADDR}:${HDX_SOLR_PORT}:8983"
 
 dbckan:
   image: ${HDX_IMG_BASE}psql-ckan:latest
@@ -141,6 +151,8 @@ dbckan:
   volumes:
     - "${HDX_BASE_VOL_PATH}/psql-ckan:/srv/db"
     - "${HDX_BASE_VOL_PATH}/log/ckan-psql:/var/log/psql"
+  ports:
+    - "${HDX_CKANDB_ADDR}:${HDX_CKANDB_PORT}:5432"
 
 ckan:
   image: ${HDX_IMG_BASE}ckan:latest
@@ -159,8 +171,8 @@ ckan:
     - "${HDX_PREFIX}docs.${HDX_DOMAIN}:${HDX_WB_ADDR}"
     - "${HDX_PREFIX}data.${HDX_DOMAIN}:${HDX_WB_ADDR}"
     - "${HDX_PREFIX}manage.${HDX_DOMAIN}:${HDX_WB_ADDR}"
-    - "${HDX_CKANDB_ADDR}: db"
-    - "${HDX_SOLR_ADDR}: solr"
+#    - "${HDX_CKANDB_ADDR}: db"
+#    - "${HDX_SOLR_ADDR}: solr"
   environment:
     - HDX_CKAN_BRANCH=${HDX_CKAN_BRANCH}
     - HDX_TYPE=${HDX_TYPE}
@@ -191,6 +203,8 @@ dbcps:
   volumes:
     - "${HDX_BASE_VOL_PATH}/psql-cps:/srv/db"
     - "${HDX_BASE_VOL_PATH}/log/cps-psql:/var/log/psql"
+  ports:
+    - "${HDX_CPSDB_ADDR}:${HDX_CPSDB_PORT}:5432"
 
 cps:
   image: ${HDX_IMG_BASE}cps:latest
@@ -207,7 +221,6 @@ cps:
     - "${HDX_PREFIX}docs.${HDX_DOMAIN}:${HDX_WB_ADDR}"
     - "${HDX_PREFIX}data.${HDX_DOMAIN}:${HDX_WB_ADDR}"
     - "${HDX_PREFIX}manage.${HDX_DOMAIN}:${HDX_WB_ADDR}"
-    - "${HDX_CPSDB_ADDR}: db"
   environment:
     - HDX_CPS_BRANCH=${HDX_CPS_BRANCH}
     - HDX_TYPE=${HDX_TYPE}
