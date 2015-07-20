@@ -238,6 +238,8 @@ cps:
     - HDX_SSH_PUB=${HDX_SSH_PUB}
     - HDX_CPSDB_ADDR=${HDX_CPSDB_ADDR}
     - HDX_CPSDB_PORT=${HDX_CPSDB_PORT}
+    - HDX_SMTP_ADDR=${HDX_SMTP_ADDR}
+    - HDX_SMTP_PORT=${HDX_SMTP_PORT}
 
 ################################################
 
