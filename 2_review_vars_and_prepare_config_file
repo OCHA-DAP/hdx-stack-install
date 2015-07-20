@@ -17,7 +17,7 @@ if [ $? -eq 0 ]; then
 
     echo "Please customize the public vars."
     echo "The prefix, http and https ports maybe?"
-    read -p "Press any key to start $EDITOR " -n 1 -r
+    read -p "Press any key to start $EDITOR. " -n 1 -r
     $EDITOR $mypath/set_vars
 
     echo "Creating docker-compose configuration file..."
@@ -26,7 +26,7 @@ if [ $? -eq 0 ]; then
     envsubst < $mypath/common.tpl > common.yml
 
     echo "Done. Inspect it."
-    read -p "Press any key to start $EDITOR " -n 1 -r
+    read -p "Press any key to start $EDITOR. " -n 1 -r
     $EDITOR common.yml
 
     # echo "You are ready to start the HDX environment!"
