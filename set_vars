@@ -67,4 +67,5 @@ $e HDX_BLOGDB_PORT=$((HDX_BASEPORT+17))
 # --------------------------------
 $e HDX_IMG_BASE=teodorescuserban/hdx-
 $e HDX_FOLDER=/srv/hdx
+$e HDX_SHORT_PREFIX=$(echo $HDX_PREFIX | sed 's/-$//')
 # --------------------------------------------------------------

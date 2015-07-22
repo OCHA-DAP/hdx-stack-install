@@ -12,8 +12,10 @@ varnish:
 #    - "web:web"
   environment:
     - HDX_HTTPS_REDIRECT=off # This will only be useful in BlackMesh prod (or AWS w/ SSL-terminating ELB)
+    - HDX_NGINX_HOST=${HDX_WB_ADDR}
     - HDX_NGINX_ADDR=${HDX_WB_ADDR}
     - HDX_NGINX_PORT=${HDX_HTTP_PORT}
+    - VIRTUAL_HOST=${HDX_SHORT_PREFIX}.${HDX_DOMAIN},${HDX_PREFIX}-docs.${HDX_DOMAIN},${HDX_PREFIX}-data.${HDX_DOMAIN},${HDX_PREFIX}-manage.${HDX_DOMAIN}
 
 web:
   image: ${HDX_IMG_BASE}nginx:latest
