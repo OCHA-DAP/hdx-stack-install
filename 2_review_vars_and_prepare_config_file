@@ -5,7 +5,17 @@
 mypath="hdx-install"
 
 if [ -z $EDITOR ]; then
-  EDITOR=mcedit
+  which mcedit > /dev/null
+  if [ $? -eq 0 ]; then
+    EDITOR=mcedit
+  else
+    which nano > /dev/null
+    if [ $? -eq 0 ]; then
+      EDITOR=mcedit
+    else
+      EDITOR=vi
+    fi
+  fi
 fi
 
 if [ ! -d hdx-install-private ]; then
