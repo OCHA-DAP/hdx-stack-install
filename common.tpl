@@ -139,6 +139,7 @@ dataproxy:
   extra_hosts:
     - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
     - "${HDX_PREFIX}manage.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
+    - "manage.${HDX_DOMAIN}: ${HDX_PROD_CPS_ADDR}"
 
 solr:
   image: ${HDX_IMG_BASE}solr:latest
