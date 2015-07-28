@@ -135,7 +135,7 @@ dataproxy:
   hostname: dataproxy
   restart: always
   ports:
-    - "${HDX_DATAPROXY_ADDR}:${HDX_DATAPROXY_PORT}:9223"
+    - "${HDX_DATAPROXY_ADDR}:${HDX_DATAPROXY_PORT}:5000"
   extra_hosts:
     - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
     - "${HDX_PREFIX}manage.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
@@ -172,7 +172,7 @@ ckan:
     - "${HDX_BASE_VOL_PATH}/filestore:/srv/filestore"
     - "${HDX_BASE_VOL_PATH}/log/ckan:/var/log/ckan"
   ports:
-    - "${HDX_CKAN_ADDR}:${HDX_CKAN_PORT}:9221"
+    - "${HDX_CKAN_ADDR}:${HDX_CKAN_PORT}:5000"
   extra_hosts:
     - "${HDX_PREFIX}docs.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
     - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
