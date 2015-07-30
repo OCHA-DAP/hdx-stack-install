@@ -118,7 +118,7 @@ gisworker:
     - HDX_PREFIX=${HDX_PREFIX}
     - HDX_DOMAIN=${HDX_DOMAIN}
     - HDX_GIS_API_KEY=${HDX_GIS_API_KEY}
-  mem_limit: 1G
+#  mem_limit: 1G
 
 gisdb:
   image: ${HDX_IMG_BASE}psql-gis:latest
