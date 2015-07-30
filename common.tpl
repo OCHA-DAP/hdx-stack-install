@@ -199,6 +199,8 @@ ckan:
     - HDX_SOLR_PORT=${HDX_SOLR_PORT}
     - HDX_CKANDB_ADDR=${HDX_CKANDB_ADDR}
     - HDX_CKANDB_PORT=${HDX_CKANDB_PORT}
+    - HDX_GISDB_ADDR=${HDX_GISDB_ADDR}
+    - HDX_GISDB_PORT=${HDX_GISDB_PORT}
 
 ################################################
 
