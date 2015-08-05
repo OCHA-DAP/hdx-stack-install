@@ -11,7 +11,7 @@ e="export"
 #
 
 # --------------------------------------------------------------
-# non-secret values. we dont care about those.
+# most likely values you want to change
 # --------------------------------------------------------------
 $e HDX_DOCKER_ADDR=172.17.42.1
 $e HDX_DOMAIN=hdx.rwlabs.org
@@ -20,7 +20,7 @@ $e HDX_TYPE=dev
 $e HDX_SHORT_PREFIX=$(echo $HDX_PREFIX | sed 's/-$//')
 $e HDX_BASE_VOL_PATH=/data/volumes/${HDX_SHORT_PREFIX}
 $e HDX_CPS_BRANCH=tags/v0.7.3
-$e HDX_CKAN_BRANCH=tags/v0.9.5
+$e HDX_CKAN_BRANCH=tags/v0.10.2
 # --------------------------------
 # change the IP below to make your dataproxy access the production cps
 # this is only needed on non-production environmet
@@ -35,6 +35,17 @@ $e HDX_WB_ADDR=${HDX_DOCKER_ADDR}
 $e HDX_MP_ADDR=${HDX_DOCKER_ADDR}
 # private ip of the database server
 $e HDX_DB_ADDR=${HDX_DOCKER_ADDR}
+# --------------------------------
+# volumes settings
+# --------------------------------
+# static location (static files like www)
+$e HDX_VOL_FILES=${HDX_BASE_VOL_PATH}+'/static'
+# backup location
+$e HDX_VOL_BACKUPS=${HDX_VOL_STATIC}+'/backups'
+# logs location
+$e HDX_VOL_LOGS=${HDX_VOL_STATIC_PATH}+'/logs'
+# db location
+$e HDX_VOL_DBS=${HDX_BASE_VOL_PATH}+'/dbs'
 # --------------------------------
 $e HDX_VARNISH_HTTP_PORT=$HDX_BASEPORT
 $e HDX_HTTP_PORT=$((HDX_BASEPORT+1))
