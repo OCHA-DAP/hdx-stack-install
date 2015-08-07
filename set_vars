@@ -39,13 +39,13 @@ $e HDX_DB_ADDR=${HDX_DOCKER_ADDR}
 # volumes settings
 # --------------------------------
 # static location (static files like www)
-$e HDX_VOL_FILES=${HDX_BASE_VOL_PATH}+'/static'
+$e HDX_VOL_FILES=${HDX_BASE_VOL_PATH}'/files'
 # backup location
-$e HDX_VOL_BACKUPS=${HDX_VOL_STATIC}+'/backups'
+$e HDX_VOL_BACKUPS=${HDX_BASE_VOL_PATH}'/backups'
 # logs location
-$e HDX_VOL_LOGS=${HDX_VOL_STATIC_PATH}+'/logs'
+$e HDX_VOL_LOGS=${HDX_BASE_VOL_PATH}'/logs'
 # db location
-$e HDX_VOL_DBS=${HDX_BASE_VOL_PATH}+'/dbs'
+$e HDX_VOL_DBS=${HDX_BASE_VOL_PATH}'/dbs'
 # --------------------------------
 $e HDX_VARNISH_HTTP_PORT=$HDX_BASEPORT
 $e HDX_HTTP_PORT=$((HDX_BASEPORT+1))
