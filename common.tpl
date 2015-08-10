@@ -104,6 +104,7 @@ gisworker:
     - HDX_PREFIX=${HDX_PREFIX}
     - HDX_DOMAIN=${HDX_DOMAIN}
     - HDX_GIS_API_KEY=${HDX_GIS_API_KEY}
+    - HDX_GIS_TMP=${HDX_GIS_TMP}
 #  mem_limit: 1G
 
 gisdb:
