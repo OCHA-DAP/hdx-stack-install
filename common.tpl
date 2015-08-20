@@ -13,7 +13,7 @@ varnish:
     - HDX_NGINX_HOST=${HDX_WB_ADDR}
     - HDX_NGINX_ADDR=${HDX_WB_ADDR}
     - HDX_NGINX_PORT=${HDX_HTTP_PORT}
-    - VIRTUAL_HOST=${HDX_SHORT_PREFIX}.${HDX_DOMAIN},${HDX_PREFIX}-docs.${HDX_DOMAIN},${HDX_PREFIX}-data.${HDX_DOMAIN},${HDX_PREFIX}-manage.${HDX_DOMAIN}
+    - VIRTUAL_HOST=${HDX_SHORT_PREFIX}.${HDX_DOMAIN},${HDX_PREFIX}docs.${HDX_DOMAIN},${HDX_PREFIX}data.${HDX_DOMAIN},${HDX_PREFIX}manage.${HDX_DOMAIN}
 
 web:
   image: ${HDX_IMG_BASE}nginx:latest
@@ -152,7 +152,7 @@ ckan:
   hostname: ckan
   restart: always
   volumes:
-    - "${HDX_VOL_BACKUPS}/backup:/srv/backup"
+    - "${HDX_VOL_BACKUPS}:/srv/backup"
     - "${HDX_VOL_FILES}/filestore:/srv/filestore"
     - "${HDX_VOL_LOGS}/ckan:/var/log/ckan"
   ports:
@@ -204,8 +204,8 @@ cps:
   ports:
     - "${HDX_CPS_ADDR}:${HDX_CPS_PORT}:8080"
   volumes:
-    - "${HDX_VOL_BACKUPS}/backup:/srv/backup"
-    - "${HDX_VOL_LOGS}/log/cps:${HDX_FOLDER}/logs"
+    - "${HDX_VOL_BACKUPS}:/srv/backup"
+    - "${HDX_VOL_LOGS}/cps:${HDX_FOLDER}/logs"
   extra_hosts:
     - "${HDX_PREFIX}docs.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
     - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
@@ -256,7 +256,7 @@ blog:
     - "${HDX_PREFIX}docs.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
     - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
     - "${HDX_PREFIX}manage.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
-    - "${HDX_BLOGDB_ADDR}: db"
+#    - "${HDX_BLOGDB_ADDR}: db"
   environment:
     - HDX_BACKUP_SERVER=${HDX_BACKUP_SERVER}
     - HDX_BACKUP_USER=${HDX_BACKUP_USER}

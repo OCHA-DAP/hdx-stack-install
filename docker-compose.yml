@@ -96,3 +96,9 @@ blog:
     service: blog
 
 ################################################
+# UTIL
+################################################
+util:
+  extends:
+    file: common.yml
+    service: util
