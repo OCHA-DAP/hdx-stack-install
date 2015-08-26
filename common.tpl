@@ -282,7 +282,7 @@ util:
   hostname: utility
 #  restart: always
   volumes:
-    - "${HDX_VOL_BACKUPS}:/srv/backups"
+    - "${HDX_VOL_BACKUPS}:/srv/backup"
     - "${HDX_VOL_FILES}:/srv/files"
     - "${HDX_VOL_LOGS}:/srv/logs"
   extra_hosts:
