@@ -29,12 +29,12 @@ $e HDX_PROD_CPS_ADDR=${HDX_DOCKER_ADDR}
 # --------------------------------
 # change the IPs below for Blackmesh production installations!
 # --------------------------------
-# private ip of the web frontend server
-$e HDX_WB_ADDR=${HDX_DOCKER_ADDR}
 # private ip of the multipurpose server
 $e HDX_MP_ADDR=${HDX_DOCKER_ADDR}
+# private ip of the web frontend server
+$e HDX_WB_ADDR=${HDX_MP_ADDR}
 # private ip of the database server
-$e HDX_DB_ADDR=${HDX_DOCKER_ADDR}
+$e HDX_DB_ADDR=${HDX_MP_ADDR}
 # --------------------------------
 # volumes settings
 # --------------------------------
