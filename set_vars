@@ -84,7 +84,8 @@ $e HDX_BLOGDB_PORT=$((HDX_BASEPORT+17))
 # --------------------------------
 $e HDX_IMG_BASE=teodorescuserban/hdx-
 $e HDX_FOLDER=/srv/hdx
-$e HDX_BACKUP_FOLDER=/srv/backup
+# $e HDX_BACKUP_FOLDER=/srv/backup
+$e HDX_BACKUP_DIR=/srv/backup
 $e HDX_BLOG_DIR=/srv/www/docs
 $e HDX_GIS_TMP=/tmp
 # --------------------------------------------------------------
