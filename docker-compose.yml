@@ -96,9 +96,13 @@ blog:
     service: blog
 
 ################################################
-# UTIL
+# UTILITIES
 ################################################
 util:
   extends:
     file: common.yml
     service: util
+jenkins:
+  extends:
+    file: common.yml
+    service: jenkins

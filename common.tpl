@@ -293,7 +293,9 @@ util:
 #  restart: always
   volumes:
     - "${HDX_VOL_BACKUPS}:/srv/backup"
-    - "${HDX_VOL_FILES}:/srv/files"
+    - "${HDX_VOL_FILES}/filestore:/srv/filestore"
+    - "${HDX_VOL_FILES}/gistmp:/srv/gistmp"
+    - "${HDX_VOL_FILES}/www:/srv/www"
     - "${HDX_VOL_LOGS}:/srv/logs"
   extra_hosts:
     - "${HDX_PREFIX}docs.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
@@ -373,3 +375,27 @@ util:
     - HDX_USER_AGENT=${HDX_USER_AGENT}
     - HDX_VARNISH_HTTP_PORT=${HDX_VARNISH_HTTP_PORT}
     - HDX_WB_ADDR=${HDX_WB_ADDR}
+################################################
+jenkins:
+  image: ${HDX_IMG_BASE}jenkins:latest
+  hostname: jenkins
+#  restart: always
+  volumes:
+    - "${HDX_VOL_BACKUPS}:/srv/backup"
+  extra_hosts:
+    - "${HDX_PREFIX}docs.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
+    - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
+    - "${HDX_PREFIX}manage.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
+  environment:
+    - HDX_CKAN_ADDR=${HDX_CKAN_ADDR}
+    - HDX_CKAN_API_KEY=${HDX_CKAN_API_KEY}
+    - HDX_CKAN_BRANCH=${HDX_CKAN_BRANCH}
+    - HDX_CKANDB_ADDR=${HDX_CKANDB_ADDR}
+    - HDX_CKANDB_PORT=${HDX_CKANDB_PORT}
+    - HDX_CKANDB_DB=${HDX_CKANDB_DB}
+    - HDX_CKANDB_USER=${HDX_CKANDB_USER}
+    - HDX_CKANDB_PASS=${HDX_CKANDB_PASS}
+    - HDX_CKANDB_USER_DATASTORE=${HDX_CKANDB_USER_DATASTORE}
+    - HDX_CKANDB_DB_DATASTORE=${HDX_CKANDB_DB_DATASTORE}
+    - HDX_CKAN_PORT=${HDX_CKAN_PORT}
+    - HDX_CKAN_RECAPTCHA_KEY=${HDX_CKAN_RECAPTCHA_KEY}
