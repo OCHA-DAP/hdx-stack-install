@@ -2,19 +2,6 @@
 
 ################################################
 
-varnish:
-  image: ${HDX_IMG_BASE}varnish:latest
-  hostname: varnish
-  restart: always
-  ports:
-    - "${HDX_WB_ADDR}:${HDX_VARNISH_HTTP_PORT}:80"
-  environment:
-    - HDX_HTTPS_REDIRECT=off # This will only be useful in BlackMesh prod (or AWS w/ SSL-terminating ELB)
-    - HDX_NGINX_HOST=${HDX_WB_ADDR}
-    - HDX_NGINX_ADDR=${HDX_WB_ADDR}
-    - HDX_NGINX_PORT=${HDX_HTTP_PORT}
-    - VIRTUAL_HOST=${HDX_SHORT_PREFIX}.${HDX_DOMAIN},${HDX_PREFIX}docs.${HDX_DOMAIN},${HDX_PREFIX}data.${HDX_DOMAIN},${HDX_PREFIX}manage.${HDX_DOMAIN}
-
 web:
   image: ${HDX_IMG_BASE}nginx:latest
   hostname: nginx
@@ -25,24 +12,16 @@ web:
   ports:
     - "${HDX_WB_ADDR}:${HDX_HTTP_PORT}:80"
     - "${HDX_WB_ADDR}:${HDX_HTTPS_PORT}:443"
-  environment:
-    - HDX_DOMAIN=${HDX_DOMAIN}
-    - HDX_PREFIX=${HDX_PREFIX}
-    - HDX_SSL_KEY=${HDX_SSL_KEY}
-    - HDX_TYPE=${HDX_TYPE}
-    - HDX_NGINX_PASS=${HDX_NGINX_PASS}
-    - HDX_BLOG_ADDR=${HDX_BLOG_ADDR}
-    - HDX_BLOG_PORT=${HDX_BLOG_PORT}
-    - HDX_CKAN_ADDR=${HDX_CKAN_ADDR}
-    - HDX_CKAN_PORT=${HDX_CKAN_PORT}
-    - HDX_CPS_ADDR=${HDX_CPS_ADDR}
-    - HDX_CPS_PORT=${HDX_CPS_PORT}
-    - HDX_DATAPROXY_ADDR=${HDX_DATAPROXY_ADDR}
-    - HDX_DATAPROXY_PORT=${HDX_DATAPROXY_PORT}
-    - HDX_GISAPI_ADDR=${HDX_GISAPI_ADDR}
-    - HDX_GISAPI_PORT=${HDX_GISAPI_PORT}
-    - HDX_GISLAYER_ADDR=${HDX_GISLAYER_ADDR}
-    - HDX_GISLAYER_PORT=${HDX_GISLAYER_PORT}
+  env_file:
+    - ./.env_common
+    - ./.env_web
+    - ./.env_web_private
+    - ./.env_blog
+    - ./.env_ckan
+    - ./.env_cps
+    - ./.env_dataproxy
+    - ./.env_gisapi
+    - ./.env_gislayer
 
 ################################################
 
@@ -54,8 +33,10 @@ email:
     - "${HDX_VOL_LOGS}/email:/var/log/email"
   ports:
     - "${HDX_SMTP_ADDR}:${HDX_SMTP_PORT}:25"
-  environment:
-    - HDX_DKIM_KEY=${HDX_DKIM_KEY}
+  env_file:
+    - ./.env_common
+    - ./.env_email
+    - ./.env_email_private
 
 ################################################
 
@@ -65,15 +46,18 @@ gisapi:
   ports:
     - "${HDX_GISAPI_ADDR}:${HDX_GISAPI_PORT}:80"
     - "${HDX_GISAPI_DEBUG_ADDR}:${HDX_GISAPI_DEBUG_PORT}:5858"
-  environment:
-    - HDX_GISDB_ADDR=${HDX_GISDB_ADDR}
-    - HDX_GISDB_PORT=${HDX_GISDB_PORT}
+  env_file:
+    - ./.env_common
+    - ./.env_gis_db
+# ?? why not - ./.env_gis_db_private
 
 gisredis:
   image: ${HDX_IMG_BASE}redis:latest
   hostname: gisredis
   ports:
     - "${HDX_GISREDIS_ADDR}:${HDX_GISREDIS_PORT}:6379"
+  env_file:
+    - ./.env_common
 
 gislayer:
   image: ${HDX_IMG_BASE}gislayer:latest
@@ -82,35 +66,23 @@ gislayer:
     - "${HDX_GISLAYER_ADDR}:${HDX_GISLAYER_PORT}:5000"
   extra_hosts:
     - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
-  environment:
-    - HDX_GISDB_ADDR=${HDX_GISDB_ADDR}
-    - HDX_GISDB_PORT=${HDX_GISDB_PORT}
-    - HDX_GISDB_DB=${HDX_GISDB_DB}
-    - HDX_GISDB_USER=${HDX_GISDB_USER}
-    - HDX_GISDB_PASS=${HDX_GISDB_PASS}
-    - HDX_GISREDIS_ADDR=${HDX_GISREDIS_ADDR}
-    - HDX_GISREDIS_PORT=${HDX_GISREDIS_PORT}
-    - HDX_PREFIX=${HDX_PREFIX}
-    - HDX_DOMAIN=${HDX_DOMAIN}
-    - HDX_GIS_API_KEY=${HDX_GIS_API_KEY}
+  env_file:
+    - ./.env_common
+    - ./.env_gis_db
+    - ./.env_gis_db_private
+    - ./.env_gis_private
 
 gisworker:
   image: ${HDX_IMG_BASE}gisworker:latest
   hostname: gisworker
   extra_hosts:
     - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
-  environment:
-    - HDX_GISDB_ADDR=${HDX_GISDB_ADDR}
-    - HDX_GISDB_PORT=${HDX_GISDB_PORT}
-    - HDX_GISDB_DB=${HDX_GISDB_DB}
-    - HDX_GISDB_USER=${HDX_GISDB_USER}
-    - HDX_GISDB_PASS=${HDX_GISDB_PASS}
-    - HDX_GISREDIS_ADDR=${HDX_GISREDIS_ADDR}
-    - HDX_GISREDIS_PORT=${HDX_GISREDIS_PORT}
-    - HDX_PREFIX=${HDX_PREFIX}
-    - HDX_DOMAIN=${HDX_DOMAIN}
-    - HDX_GIS_API_KEY=${HDX_GIS_API_KEY}
-    - HDX_GIS_TMP=${HDX_GIS_TMP}
+  env_file:
+    - ./.env_common
+    - ./.env_gis
+    - ./.env_gis_db
+    - ./.env_gis_db_private
+    - ./.env_gis_private
 #  mem_limit: 1G
 
 gisdb:
@@ -121,6 +93,8 @@ gisdb:
     - "${HDX_VOL_LOGS}/gis-psql:/var/log/psql"
   ports:
     - "${HDX_GISDB_ADDR}:${HDX_GISDB_PORT}:5432"
+  env_file:
+    - ./.env_common
 
 ################################################
 dataproxy:
@@ -133,6 +107,8 @@ dataproxy:
     - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
     - "${HDX_PREFIX}manage.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
     - "manage.${HDX_DOMAIN}: ${HDX_PROD_CPS_ADDR}"
+  env_file:
+    - ./.env_common
 
 solr:
   image: ${HDX_IMG_BASE}solr:latest
@@ -142,6 +118,8 @@ solr:
     - "${HDX_VOL_DBS}/solr:/srv/solr/example/solr/ckan/data"
   ports:
     - "${HDX_SOLR_ADDR}:${HDX_SOLR_PORT}:8983"
+  env_file:
+    - ./.env_common
 
 dbckan:
   image: ${HDX_IMG_BASE}psql-ckan:latest
@@ -152,6 +130,9 @@ dbckan:
     - "${HDX_VOL_LOGS}/ckan-psql:/var/log/psql"
   ports:
     - "${HDX_CKANDB_ADDR}:${HDX_CKANDB_PORT}:5432"
+  env_file:
+    - ./.env_common
+    - ./.env_ckan_db_private
 
 ckan:
   image: ${HDX_IMG_BASE}ckan:latest
@@ -167,36 +148,17 @@ ckan:
     - "${HDX_PREFIX}docs.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
     - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
     - "${HDX_PREFIX}manage.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
-  environment:
-    - HDX_BACKUP_SERVER=${HDX_BACKUP_SERVER}
-    - HDX_BACKUP_USER=${HDX_BACKUP_USER}
-    - HDX_BACKUP_BASE_DIR=${HDX_BACKUP_BASE_DIR}
-    - HDX_BACKUP_DIR=${HDX_BACKUP_DIR}
-    - HDX_CKAN_API_KEY=${HDX_CKAN_API_KEY}
-    - HDX_CKAN_BRANCH=${HDX_CKAN_BRANCH}
-    - HDX_CKAN_RECAPTCHA_KEY=${HDX_CKAN_RECAPTCHA_KEY}
-    - HDX_CKANDB_ADDR=${HDX_CKANDB_ADDR}
-    - HDX_CKANDB_PORT=${HDX_CKANDB_PORT}
-    - HDX_CKANDB_DB=${HDX_CKANDB_DB}
-    - HDX_CKANDB_USER=${HDX_CKANDB_USER}
-    - HDX_CKANDB_PASS=${HDX_CKANDB_PASS}
-    - HDX_CKANDB_USER_DATASTORE=${HDX_CKANDB_USER_DATASTORE}
-    - HDX_CKANDB_DB_DATASTORE=${HDX_CKANDB_DB_DATASTORE}
-    - HDX_DOMAIN=${HDX_DOMAIN}
-    - HDX_FILESTORE=/srv/filestore
-    - HDX_GISDB_ADDR=${HDX_GISDB_ADDR}
-    - HDX_GISDB_PORT=${HDX_GISDB_PORT}
-    - HDX_GISLAYER_ADDR=${HDX_GISLAYER_ADDR}
-    - HDX_GISLAYER_PORT=${HDX_GISLAYER_PORT}
-    - HDX_GOOGLE_DEV_KEY=${HDX_GOOGLE_DEV_KEY}
-    - HDX_PREFIX=${HDX_PREFIX}
-    - HDX_SMTP_ADDR=${HDX_SMTP_ADDR}
-    - HDX_SMTP_PORT=${HDX_SMTP_PORT}
-    - HDX_SOLR_ADDR=${HDX_SOLR_ADDR}
-    - HDX_SOLR_PORT=${HDX_SOLR_PORT}
-    - HDX_SSH_KEY=${HDX_SSH_KEY}
-    - HDX_SSH_PUB=${HDX_SSH_PUB}
-    - HDX_TYPE=${HDX_TYPE}
+  env_file:
+    - ./.env_common
+    - ./.env_backup_private
+    - ./.env_ckan
+    - ./.env_ckan_private
+    - ./.env_ckan_db
+    - ./.env_ckan_db_private
+    - ./.env_dataproxy
+    - ./.env_email
+    - ./.env_gis
+    - ./.env_solr
 
 ################################################
 
@@ -209,6 +171,8 @@ dbcps:
     - "${HDX_VOL_LOGS}/cps-psql:/var/log/psql"
   ports:
     - "${HDX_CPSDB_ADDR}:${HDX_CPSDB_PORT}:5432"
+  env_file:
+    - ./.env_common
 
 cps:
   image: ${HDX_IMG_BASE}cps:latest
@@ -223,26 +187,13 @@ cps:
     - "${HDX_PREFIX}docs.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
     - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
     - "${HDX_PREFIX}manage.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
-  environment:
-    - HDX_BACKUP_SERVER=${HDX_BACKUP_SERVER}
-    - HDX_BACKUP_USER=${HDX_BACKUP_USER}
-    - HDX_BACKUP_BASE_DIR=${HDX_BACKUP_BASE_DIR}
-    - HDX_BACKUP_DIR=${HDX_BACKUP_DIR}
-    - HDX_CKAN_API_KEY=${HDX_CKAN_API_KEY}
-    - HDX_CPS_BRANCH=${HDX_CPS_BRANCH}
-    - HDX_CPSDB_ADDR=${HDX_CPSDB_ADDR}
-    - HDX_CPSDB_PORT=${HDX_CPSDB_PORT}
-    - HDX_CPSDB_DB=${HDX_CPSDB_DB}
-    - HDX_CPSDB_USER=${HDX_CPSDB_USER}
-    - HDX_CPSDB_PASS=${HDX_CPSDB_PASS}
-    - HDX_DOMAIN=${HDX_DOMAIN}
-    - HDX_FOLDER=${HDX_FOLDER}
-    - HDX_PREFIX=${HDX_PREFIX}
-    - HDX_SMTP_ADDR=${HDX_SMTP_ADDR}
-    - HDX_SMTP_PORT=${HDX_SMTP_PORT}
-    - HDX_SSH_KEY=${HDX_SSH_KEY}
-    - HDX_SSH_PUB=${HDX_SSH_PUB}
-    - HDX_TYPE=${HDX_TYPE}
+  env_file:
+    - ./.env_common
+    - ./.env_backup_private
+    - ./.env_ckan_private
+    - ./.env_cps_db
+    - ./.env_cps_db_private
+    - ./.env_email
 
 ################################################
 
@@ -255,6 +206,8 @@ dbblog:
     - "${HDX_VOL_LOGS}/mysql-blog:${HDX_FOLDER}/mysql"
   ports:
     - "${HDX_BLOGDB_ADDR}:${HDX_BLOGDB_PORT}:3306"
+  env_file:
+    - ./.env_common
 
 blog:
   image: ${HDX_IMG_BASE}blog:latest
@@ -271,21 +224,12 @@ blog:
     - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
     - "${HDX_PREFIX}manage.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
 #    - "${HDX_BLOGDB_ADDR}: db"
-  environment:
-    - HDX_BACKUP_SERVER=${HDX_BACKUP_SERVER}
-    - HDX_BACKUP_USER=${HDX_BACKUP_USER}
-    - HDX_BACKUP_BASE_DIR=${HDX_BACKUP_BASE_DIR}
-    - HDX_BACKUP_DIR=${HDX_BACKUP_DIR}
-    - HDX_BLOG_DIR=${HDX_BLOG_DIR}
-    - HDX_BLOGDB_ADDR=${HDX_BLOGDB_ADDR}
-    - HDX_BLOGDB_PORT=${HDX_BLOGDB_PORT}
-    - HDX_BLOGDB_DB=${HDX_BLOGDB_DB}
-    - HDX_BLOGDB_USER=${HDX_BLOGDB_USER}
-    - HDX_BLOGDB_PASS=${HDX_BLOGDB_PASS}
-    - HDX_DOMAIN=${HDX_DOMAIN}
-    - HDX_PREFIX=${HDX_PREFIX}
-    - HDX_SSH_KEY=${HDX_SSH_KEY}
-    - HDX_SSH_PUB=${HDX_SSH_PUB}
+  env_file:
+    - ./.env_common
+    - ./.env_backup_private
+    - ./.env_blog
+    - ./.env_blog_db
+    - ./.env_blog_private
 
 ################################################
 util:
@@ -302,80 +246,29 @@ util:
     - "${HDX_PREFIX}docs.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
     - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
     - "${HDX_PREFIX}manage.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
-  environment:
-    - HDX_BACKUP_BASE_DIR=${HDX_BACKUP_BASE_DIR}
-    - HDX_BACKUP_SERVER=${HDX_BACKUP_SERVER}
-    - HDX_BACKUP_USER=${HDX_BACKUP_USER}
-    - HDX_BACKUP_DIR=${HDX_BACKUP_DIR}
-    - HDX_BASE_VOL_PATH=${HDX_BASE_VOL_PATH}
-    - HDX_BLOG_ADDR=${HDX_BLOG_ADDR}
-    - HDX_BLOGDB_ADDR=${HDX_BLOGDB_ADDR}
-    - HDX_BLOGDB_DB=${HDX_BLOGDB_DB}
-    - HDX_BLOGDB_PASS=${HDX_BLOGDB_PASS}
-    - HDX_BLOGDB_PORT=${HDX_BLOGDB_PORT}
-    - HDX_BLOGDB_USER=${HDX_BLOGDB_USER}
-    - HDX_BLOG_PORT=${HDX_BLOG_PORT}
-    - HDX_BLOG_DIR=${HDX_BLOG_DIR}
-    - HDX_CKAN_ADDR=${HDX_CKAN_ADDR}
-    - HDX_CKAN_API_KEY=${HDX_CKAN_API_KEY}
-    - HDX_CKAN_BRANCH=${HDX_CKAN_BRANCH}
-    - HDX_CKANDB_ADDR=${HDX_CKANDB_ADDR}
-    - HDX_CKANDB_PORT=${HDX_CKANDB_PORT}
-    - HDX_CKANDB_DB=${HDX_CKANDB_DB}
-    - HDX_CKANDB_USER=${HDX_CKANDB_USER}
-    - HDX_CKANDB_PASS=${HDX_CKANDB_PASS}
-    - HDX_CKANDB_USER_DATASTORE=${HDX_CKANDB_USER_DATASTORE}
-    - HDX_CKANDB_DB_DATASTORE=${HDX_CKANDB_DB_DATASTORE}
-    - HDX_CKAN_PORT=${HDX_CKAN_PORT}
-    - HDX_CKAN_RECAPTCHA_KEY=${HDX_CKAN_RECAPTCHA_KEY}
-    - HDX_CPS_ADDR=${HDX_CPS_ADDR}
-    - HDX_CPS_BRANCH=${HDX_CPS_BRANCH}
-    - HDX_CPSDB_ADDR=${HDX_CPSDB_ADDR}
-    - HDX_CPSDB_PORT=${HDX_CPSDB_PORT}
-    - HDX_CPSDB_DB=${HDX_CPSDB_DB}
-    - HDX_CPSDB_USER=${HDX_CPSDB_USER}
-    - HDX_CPSDB_PASS=${HDX_CPSDB_PASS}
-    - HDX_CPS_PORT=${HDX_CPS_PORT}
-    - HDX_DATAPROXY_ADDR=${HDX_DATAPROXY_ADDR}
-    - HDX_DATAPROXY_PORT=${HDX_DATAPROXY_PORT}
-    - HDX_DB_ADDR=${HDX_DB_ADDR}
-    - HDX_DKIM_KEY=${HDX_DKIM_KEY}
-    - HDX_DOCKER_ADDR=${HDX_DOCKER_ADDR}
-    - HDX_DOMAIN=${HDX_DOMAIN}
-    - HDX_FOLDER=${HDX_FOLDER}
-    - HDX_GISAPI_ADDR=${HDX_GISAPI_ADDR}
-    - HDX_GISAPI_DEBUG_ADDR=${HDX_GISAPI_DEBUG_ADDR}
-    - HDX_GISAPI_DEBUG_PORT=${HDX_GISAPI_DEBUG_PORT}
-    - HDX_GIS_API_KEY=${HDX_GIS_API_KEY}
-    - HDX_GISAPI_PORT=${HDX_GISAPI_PORT}
-    - HDX_GISDB_ADDR=${HDX_GISDB_ADDR}
-    - HDX_GISDB_PORT=${HDX_GISDB_PORT}
-    - HDX_GISDB_DB=${HDX_GISDB_DB}
-    - HDX_GISDB_USER=${HDX_GISDB_USER}
-    - HDX_GISDB_PASS=${HDX_GISDB_PASS}
-    - HDX_GISLAYER_ADDR=${HDX_GISLAYER_ADDR}
-    - HDX_GISLAYER_PORT=${HDX_GISLAYER_PORT}
-    - HDX_GISREDIS_ADDR=${HDX_GISREDIS_ADDR}
-    - HDX_GISREDIS_PORT=${HDX_GISREDIS_PORT}
-    - HDX_HTTP_PORT=${HDX_HTTP_PORT}
-    - HDX_HTTPS_PORT=${HDX_HTTPS_PORT}
-    - HDX_IMG_BASE=${HDX_IMG_BASE}
-    - HDX_MP_ADDR=${HDX_MP_ADDR}
-    - HDX_NGINX_PASS=${HDX_NGINX_PASS}
-    - HDX_PREFIX=${HDX_PREFIX}
-    - HDX_PROD_CPS_ADDR=${HDX_PROD_CPS_ADDR}
-    - HDX_SHORT_PREFIX=${HDX_SHORT_PREFIX}
-    - HDX_SMTP_ADDR=${HDX_SMTP_ADDR}
-    - HDX_SMTP_PORT=${HDX_SMTP_PORT}
-    - HDX_SOLR_ADDR=${HDX_SOLR_ADDR}
-    - HDX_SOLR_PORT=${HDX_SOLR_PORT}
-    - HDX_SSH_KEY=${HDX_SSH_KEY}
-    - HDX_SSH_PUB=${HDX_SSH_PUB}
-    - HDX_SSL_KEY=${HDX_SSL_KEY}
-    - HDX_TYPE=${HDX_TYPE}
-    - HDX_USER_AGENT=${HDX_USER_AGENT}
-    - HDX_VARNISH_HTTP_PORT=${HDX_VARNISH_HTTP_PORT}
-    - HDX_WB_ADDR=${HDX_WB_ADDR}
+  env_file:
+    - ./.env_backup_private.tpl
+    - ./.env_blog_db_private.tpl
+    - ./.env_blog_db.tpl
+    - ./.env_blog.tpl
+    - ./.env_ckan_db_private.tpl
+    - ./.env_ckan_db.tpl
+    - ./.env_ckan_private.tpl
+    - ./.env_ckan.tpl
+    - ./.env_common.tpl
+    - ./.env_cps_db_private.tpl
+    - ./.env_cps_db.tpl
+    - ./.env_cps.tpl
+    - ./.env_dataproxy.tpl
+    - ./.env_email_private.tpl
+    - ./.env_email.tpl
+    - ./.env_gis_db_private.tpl
+    - ./.env_gis_db.tpl
+    - ./.env_gis_private.tpl
+    - ./.env_gis.tpl
+    - ./.env_solr.tpl
+    - ./.env_web_private.tpl
+    - ./.env_web.tpl
 ################################################
 jenkins:
   image: ${HDX_IMG_BASE}jenkins:latest
@@ -387,16 +280,10 @@ jenkins:
     - "${HDX_PREFIX}docs.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
     - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
     - "${HDX_PREFIX}manage.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
-  environment:
-    - HDX_CKAN_ADDR=${HDX_CKAN_ADDR}
-    - HDX_CKAN_API_KEY=${HDX_CKAN_API_KEY}
-    - HDX_CKAN_BRANCH=${HDX_CKAN_BRANCH}
-    - HDX_CKANDB_ADDR=${HDX_CKANDB_ADDR}
-    - HDX_CKANDB_PORT=${HDX_CKANDB_PORT}
-    - HDX_CKANDB_DB=${HDX_CKANDB_DB}
-    - HDX_CKANDB_USER=${HDX_CKANDB_USER}
-    - HDX_CKANDB_PASS=${HDX_CKANDB_PASS}
-    - HDX_CKANDB_USER_DATASTORE=${HDX_CKANDB_USER_DATASTORE}
-    - HDX_CKANDB_DB_DATASTORE=${HDX_CKANDB_DB_DATASTORE}
-    - HDX_CKAN_PORT=${HDX_CKAN_PORT}
-    - HDX_CKAN_RECAPTCHA_KEY=${HDX_CKAN_RECAPTCHA_KEY}
+  env_file:
+    - ./.env_ckan_db_private.tpl
+    - ./.env_ckan_db.tpl
+    - ./.env_ckan_private.tpl
+    - ./.env_ckan.tpl
+    - ./.env_common.tpl
+
