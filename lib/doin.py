@@ -87,9 +87,9 @@ class Doin(object):
         sub_vars = re.findall(r'\$\{([0-9a-zA-Z_]+)\}', text.rstrip())
         for v in sub_vars:
             if v not in self.env:
-                continue
+                self.env[v] = ''
             if self.env[v] is None:
-                continue
+                self.env[v] = ''
             var_pattern = list(self.var_pattern)
             var_pattern.insert(1, v)
             text = text.replace(''.join(var_pattern), self.env[v])
