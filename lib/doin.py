@@ -72,7 +72,8 @@ class Doin(object):
                     except IndexError:
                         print 'Error trying to determine the port number for:', label
                     else:
-                        value = self.env['BASEPORT'] + port_inc
+                        # i don't like hardconding baseport key name
+                        value = self.env['HDX_BASEPORT'] + port_inc
                 # custom vars (a variable deduced from another)
                 if label in self.custom_vars:
                     name, regex, subst = self.custom_vars[label]
