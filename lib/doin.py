@@ -64,6 +64,15 @@ class Doin(object):
                     continue
                 label, value = l.split('=')
                 self.env[label] = self.replace_pattern(value)
+                # if value matches this pattern: $((something+somethingelse))
+                regexp_match = re.match(r'\$\(\(.+\+([0-9]+)\)\)', value)
+                if regexp_match:
+                    try:
+                        port_inc =  regexp_match.group(1)
+                    except IndexError:
+                        print 'Error trying to determine the port number for:', label
+                    else:
+                        value = self.env['BASEPORT'] + port_inc
                 # custom vars (a variable deduced from another)
                 if label in self.custom_vars:
                     name, regex, subst = self.custom_vars[label]
