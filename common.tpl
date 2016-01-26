@@ -13,15 +13,14 @@ web:
     - "${HDX_WB_ADDR}:${HDX_HTTP_PORT}:80"
     - "${HDX_WB_ADDR}:${HDX_HTTPS_PORT}:443"
   env_file:
-    - ./.env_common
-    - ./.env_web
-    - ./.env_web_private
-    - ./.env_blog
-    - ./.env_ckan
-    - ./.env_cps
-    - ./.env_dataproxy
-    - ./.env_gisapi
-    - ./.env_gislayer
+    - ./envs/.env_common
+    - ./envs/.env_web
+    - ./envs/.env_web_private
+    - ./envs/.env_blog
+    - ./envs/.env_ckan
+    - ./envs/.env_cps
+    - ./envs/.env_dataproxy
+    - ./envs/.env_gis
 
 ################################################
 
@@ -34,9 +33,9 @@ email:
   ports:
     - "${HDX_SMTP_ADDR}:${HDX_SMTP_PORT}:25"
   env_file:
-    - ./.env_common
-    - ./.env_email
-    - ./.env_email_private
+    - ./envs/.env_common
+    - ./envs/.env_email
+    - ./envs/.env_email_private
 
 ################################################
 
@@ -47,9 +46,9 @@ gisapi:
     - "${HDX_GISAPI_ADDR}:${HDX_GISAPI_PORT}:80"
     - "${HDX_GISAPI_DEBUG_ADDR}:${HDX_GISAPI_DEBUG_PORT}:5858"
   env_file:
-    - ./.env_common
-    - ./.env_gis_db
-# ?? why not - ./.env_gis_db_private
+    - ./envs/.env_common
+    - ./envs/.env_gis_db
+# ?? why not - ./envs/.env_gis_db_private
 
 gisredis:
   image: ${HDX_IMG_BASE}redis:latest
@@ -57,7 +56,7 @@ gisredis:
   ports:
     - "${HDX_GISREDIS_ADDR}:${HDX_GISREDIS_PORT}:6379"
   env_file:
-    - ./.env_common
+    - ./envs/.env_common
 
 gislayer:
   image: ${HDX_IMG_BASE}gislayer:latest
@@ -67,10 +66,10 @@ gislayer:
   extra_hosts:
     - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
   env_file:
-    - ./.env_common
-    - ./.env_gis_db
-    - ./.env_gis_db_private
-    - ./.env_gis_private
+    - ./envs/.env_common
+    - ./envs/.env_gis_db
+    - ./envs/.env_gis_db_private
+    - ./envs/.env_gis_private
 
 gisworker:
   image: ${HDX_IMG_BASE}gisworker:latest
@@ -78,11 +77,11 @@ gisworker:
   extra_hosts:
     - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
   env_file:
-    - ./.env_common
-    - ./.env_gis
-    - ./.env_gis_db
-    - ./.env_gis_db_private
-    - ./.env_gis_private
+    - ./envs/.env_common
+    - ./envs/.env_gis
+    - ./envs/.env_gis_db
+    - ./envs/.env_gis_db_private
+    - ./envs/.env_gis_private
 #  mem_limit: 1G
 
 gisdb:
@@ -94,7 +93,7 @@ gisdb:
   ports:
     - "${HDX_GISDB_ADDR}:${HDX_GISDB_PORT}:5432"
   env_file:
-    - ./.env_common
+    - ./envs/.env_common
 
 ################################################
 dataproxy:
@@ -108,7 +107,7 @@ dataproxy:
     - "${HDX_PREFIX}manage.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
     - "manage.${HDX_DOMAIN}: ${HDX_PROD_CPS_ADDR}"
   env_file:
-    - ./.env_common
+    - ./envs/.env_common
 
 solr:
   image: ${HDX_IMG_BASE}solr:latest
@@ -119,7 +118,7 @@ solr:
   ports:
     - "${HDX_SOLR_ADDR}:${HDX_SOLR_PORT}:8983"
   env_file:
-    - ./.env_common
+    - ./envs/.env_common
 
 dbckan:
   image: ${HDX_IMG_BASE}psql-ckan:latest
@@ -131,8 +130,8 @@ dbckan:
   ports:
     - "${HDX_CKANDB_ADDR}:${HDX_CKANDB_PORT}:5432"
   env_file:
-    - ./.env_common
-    - ./.env_ckan_db_private
+    - ./envs/.env_common
+    - ./envs/.env_ckan_db_private
 
 ckan:
   image: ${HDX_IMG_BASE}ckan:latest
@@ -149,16 +148,16 @@ ckan:
     - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
     - "${HDX_PREFIX}manage.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
   env_file:
-    - ./.env_common
-    - ./.env_backup_private
-    - ./.env_ckan
-    - ./.env_ckan_private
-    - ./.env_ckan_db
-    - ./.env_ckan_db_private
-    - ./.env_dataproxy
-    - ./.env_email
-    - ./.env_gis
-    - ./.env_solr
+    - ./envs/.env_common
+    - ./envs/.env_backup_private
+    - ./envs/.env_ckan
+    - ./envs/.env_ckan_private
+    - ./envs/.env_ckan_db
+    - ./envs/.env_ckan_db_private
+    - ./envs/.env_dataproxy
+    - ./envs/.env_email
+    - ./envs/.env_gis
+    - ./envs/.env_solr
 
 ################################################
 
@@ -172,7 +171,7 @@ dbcps:
   ports:
     - "${HDX_CPSDB_ADDR}:${HDX_CPSDB_PORT}:5432"
   env_file:
-    - ./.env_common
+    - ./envs/.env_common
 
 cps:
   image: ${HDX_IMG_BASE}cps:latest
@@ -188,12 +187,12 @@ cps:
     - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
     - "${HDX_PREFIX}manage.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
   env_file:
-    - ./.env_common
-    - ./.env_backup_private
-    - ./.env_ckan_private
-    - ./.env_cps_db
-    - ./.env_cps_db_private
-    - ./.env_email
+    - ./envs/.env_common
+    - ./envs/.env_backup_private
+    - ./envs/.env_ckan_private
+    - ./envs/.env_cps_db
+    - ./envs/.env_cps_db_private
+    - ./envs/.env_email
 
 ################################################
 
@@ -207,7 +206,7 @@ dbblog:
   ports:
     - "${HDX_BLOGDB_ADDR}:${HDX_BLOGDB_PORT}:3306"
   env_file:
-    - ./.env_common
+    - ./envs/.env_common
 
 blog:
   image: ${HDX_IMG_BASE}blog:latest
@@ -225,11 +224,11 @@ blog:
     - "${HDX_PREFIX}manage.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
 #    - "${HDX_BLOGDB_ADDR}: db"
   env_file:
-    - ./.env_common
-    - ./.env_backup_private
-    - ./.env_blog
-    - ./.env_blog_db
-    - ./.env_blog_private
+    - ./envs/.env_common
+    - ./envs/.env_backup_private
+    - ./envs/.env_blog
+    - ./envs/.env_blog_db
+    - ./envs/.env_blog_db_private
 
 ################################################
 util:
@@ -247,28 +246,28 @@ util:
     - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
     - "${HDX_PREFIX}manage.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
   env_file:
-    - ./.env_backup_private.tpl
-    - ./.env_blog_db_private.tpl
-    - ./.env_blog_db.tpl
-    - ./.env_blog.tpl
-    - ./.env_ckan_db_private.tpl
-    - ./.env_ckan_db.tpl
-    - ./.env_ckan_private.tpl
-    - ./.env_ckan.tpl
-    - ./.env_common.tpl
-    - ./.env_cps_db_private.tpl
-    - ./.env_cps_db.tpl
-    - ./.env_cps.tpl
-    - ./.env_dataproxy.tpl
-    - ./.env_email_private.tpl
-    - ./.env_email.tpl
-    - ./.env_gis_db_private.tpl
-    - ./.env_gis_db.tpl
-    - ./.env_gis_private.tpl
-    - ./.env_gis.tpl
-    - ./.env_solr.tpl
-    - ./.env_web_private.tpl
-    - ./.env_web.tpl
+    - ./envs/.env_backup_private
+    - ./envs/.env_blog_db_private
+    - ./envs/.env_blog_db
+    - ./envs/.env_blog
+    - ./envs/.env_ckan_db_private
+    - ./envs/.env_ckan_db
+    - ./envs/.env_ckan_private
+    - ./envs/.env_ckan
+    - ./envs/.env_common
+    - ./envs/.env_cps_db_private
+    - ./envs/.env_cps_db
+    - ./envs/.env_cps
+    - ./envs/.env_dataproxy
+    - ./envs/.env_email_private
+    - ./envs/.env_email
+    - ./envs/.env_gis_db_private
+    - ./envs/.env_gis_db
+    - ./envs/.env_gis_private
+    - ./envs/.env_gis
+    - ./envs/.env_solr
+    - ./envs/.env_web_private
+    - ./envs/.env_web
 ################################################
 jenkins:
   image: ${HDX_IMG_BASE}jenkins:latest
@@ -281,9 +280,9 @@ jenkins:
     - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
     - "${HDX_PREFIX}manage.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
   env_file:
-    - ./.env_ckan_db_private.tpl
-    - ./.env_ckan_db.tpl
-    - ./.env_ckan_private.tpl
-    - ./.env_ckan.tpl
-    - ./.env_common.tpl
+    - ./envs/.env_ckan_db_private
+    - ./envs/.env_ckan_db
+    - ./envs/.env_ckan_private
+    - ./envs/.env_ckan
+    - ./envs/.env_common
 
