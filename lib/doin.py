@@ -3,6 +3,7 @@
 # 2015 copyleft "Serban Teodorescu <teodorescu.serban@gmail.com>"
 
 import fcntl
+import getpass
 import re
 import os
 import pprint
@@ -15,24 +16,21 @@ import sys
 class Doin(object):
     """encapsulates some dirty logic for configuring a docker stack."""
 
-    version = '0.1'
+    version = '0.2'
 
     def __init__(self, vars_file='vars', var_pattern=['${', '}'],
                  private_vars_separator=':::'):
         """initializer."""
         self.custom_vars = dict()
-        self.private_files = dict()
         self.env = dict()
-        self.vars_file = vars_file
-        self.var_pattern = var_pattern
+        self.files_folder = '.files'
+        self.private_files = dict()
         self.private_vars_separator = private_vars_separator
+        self.var_pattern = var_pattern
+        self.vars_file = vars_file
         self.env['DOCKER0_ADDR'] = self.get_ip_address('docker0')
-        self.private_repo = {
-            'base_url': False,
-            'user': False,
-            'pass': False,
-            'files': []
-        }
+        self.private_repo = dict.fromkeys(['base_url', 'files',
+                                           'user', 'pass'])
 
     @staticmethod
     def get_ip_address(ifname):
@@ -44,60 +42,69 @@ class Doin(object):
             struct.pack('256s', ifname[:15])
         )[20:24])
 
+    def _file_path(self, file_name):
+        return '/'.join([self.files_folder, file_name])
+
     def _import_file(self, file_name):
         """import a file (e.g. rsa key or certificate into a string."""
-        return_list = list()
-        try:
-            with file(file_name) as f:
-                for line in f.readlines():
-                    # if '-----' in line:
-                    #     continue
-                    return_list.append(line.rstrip())
-        except IOError:
-            print 'File not found or inaccessible:', file_name
-            return ''
-        return '"' + self.private_vars_separator.join(return_list) + '"'
+        with file(self._file_path(file_name)) as f:
+            return f.read().replace('\n', self.private_vars_separator)
 
     def import_private_files(self):
         """import all private files in self.private_files."""
         for var_name, file_name in self.private_files.items():
             self.env[var_name] = self._import_file(file_name)
 
-    def configure_remote_repo(self):
+    def _configure_remote_repo(self):
         """configure params to be able to connect to a remote repo."""
         if not self.private_repo['base_url']:
-            print 'Example of a base url:',
-            print 'https://bitbucket.org/user/private-repo/raw/master/'
             self.private_repo['base_url'] = raw_input('Base url for your repo: ')
         if not self.private_repo['user']:
             self.private_repo['user'] = raw_input('Your repo username: ')
         if not self.private_repo['pass']:
-            self.private_repo['pass'] = raw_input('Your repo password: ')
+            self.private_repo['pass'] = getpass.getpass('Your repo password: ')
+
+    def _fetch_remote_private_file(self, file_name):
+        """
+        fetch a file from a remote repo and save it locally.
+
+        uses url and credentials from self.private_repo
+        """
+        if os.path.isfile(self._file_path(file_name)):
+            return True
+        if not os.path.isdir(self.files_folder):
+            os.makedirs(self.files_folder)
+        self._configure_remote_repo()
+        url = ''.join([self.private_repo['base_url'], file_name])
+        user = self.private_repo['user']
+        password = self.private_repo['pass']
+        # print url, user, password
+        try:
+            req = requests.get(url, auth=(user, password))
+        except requests.exceptions.ConnectionError:
+            print 'There was a problem connecting to your repo host.'
+            print 'Fetch of', file_name, 'skipped.'
+        else:
+            if req.status_code == 200:
+                with open(self._file_path(file_name), 'w') as f:
+                    f.write(req.text)
+                return True
+            elif req.status_code == 404:
+                print 'There was a problem with the url path or file name.'
+                print 'Fetch of', file_name, 'skipped.'
+            elif req.status_code == 401 or req.status_code == 403:
+                print 'There was a problem with your repo credentials.'
+                print 'Fetch of', file_name, 'skipped.'
+            else:
+                print 'There was a problem connecting to your repo.'
+                print 'Fetch of', file_name, 'skipped.'
+        return False
 
     def import_remote_private_files(self):
         """import private files from a remote repo."""
-        self.configure_remote_repo()
-        for item in self.private_repo['files']:
-            url = ''.join([self.private_repo['base_url'], item['file_name']])
-            user = self.private_repo['user']
-            password = self.private_repo['pass']
-            try:
-                req = requests.get(url, auth=(user,password))
-            except requests.exceptions.ConnectionError:
-                print 'There was a problem connecting to your repo host.'
-                print 'Fetch of', item['file_name'], 'skipped.'
-            else:
-                if req.status_code == 200:
-                    self.env[item['var_name']] = req.text.replace('\n', ':::')
-                elif req.status_code == 404:
-                    print 'There was a problem with the url path or file name.'
-                    print 'Fetch of', item['file_name'], 'skipped.'
-                elif req.status_code == 401 or req.status_code == 403:
-                    print 'There was a problem with your repo credentials.'
-                    print 'Fetch of', item['file_name'], 'skipped.'
-                else:
-                    print 'There was a problem connecting to your repo.'
-                    print 'Fetch of', item['file_name'], 'skipped.'
+        for var_name, file_name in self.private_repo['files']:
+            if self._fetch_remote_private_file(file_name):
+                self.env[var_name] = self._import_file(file_name)
 
     def import_vars(self):
         """load vars from vars file, substitution included, into self.env."""
@@ -112,9 +119,9 @@ class Doin(object):
                 regexp_match = re.match(r'\$\(\(.+\+([0-9]+)\)\)', value)
                 if regexp_match:
                     try:
-                        port_inc =  regexp_match.group(1)
+                        port_inc = regexp_match.group(1)
                     except IndexError:
-                        print 'Error trying to determine the port number for:', label
+                        print 'Error trying to set the port number for:', label
                     else:
                         # i don't like hardconding baseport key name
                         value = int(self.env['HDX_BASEPORT']) + int(port_inc)
@@ -185,38 +192,15 @@ def main():
     # }
     c.private_repo = {
         'base_url': 'https://bitbucket.org/teodorescuserban/hdx-install-private/raw/master/',
-        'user': '',
-        'pass': '',
-        'files': [
-            {
-                'var_name': 'HDX_SSL_CRT',
-                'file_name': 'ssl.crt'
-            },
-            {
-                'var_name': 'HDX_SSL_KEY',
-                'file_name': 'ssl.key'
-            },
-            {
-                'var_name': 'HDX_SSH_PUB',
-                'file_name': 'ssh.crt'
-            },
-            {
-                'var_name': 'HDX_SSH_KEY',
-                'file_name': 'ssh.key'
-            },
-            {
-                'var_name': 'HDX_DKIM_CRT',
-                'file_name': 'dkim.crt'
-            },
-            {
-                'var_name': 'HDX_DKIM_KEY',
-                'file_name': 'dkim.key'
-            },
-            {
-                'var_name': 'HDX_NGINX_PASS',
-                'file_name': 'nginx.pass'
-            },
-        ]
+        'user': 'hdx-user',
+        'pass': False,
+        'files': [['HDX_SSL_CRT', 'ssl.crt'],
+                  ['HDX_SSL_KEY', 'ssl.key'],
+                  ['HDX_SSH_PUB', 'ssh.crt'],
+                  ['HDX_SSH_KEY', 'ssh.key'],
+                  ['HDX_DKIM_CRT', 'dkim.crt'],
+                  ['HDX_DKIM_KEY', 'dkim.key'],
+                  ['HDX_NGINX_PASS', 'nginx.pass']]
     }
 
     # c.import_private_files()
