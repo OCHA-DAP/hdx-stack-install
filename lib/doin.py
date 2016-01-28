@@ -5,6 +5,7 @@
 import fcntl
 import re
 import os
+import pprint
 import requests
 import socket
 import struct
@@ -87,7 +88,7 @@ class Doin(object):
                 print 'Fetch of', item['file_name'], 'skipped.'
             else:
                 if req.status_code == 200:
-                    self.env[item['var_name']] = self._import_file(req.text)
+                    self.env[item['var_name']] = req.text.replace('\n', ':::')
                 elif req.status_code == 404:
                     print 'There was a problem with the url path or file name.'
                     print 'Fetch of', item['file_name'], 'skipped.'
@@ -221,6 +222,7 @@ def main():
     # c.import_private_files()
     c.import_remote_private_files()
     c.import_vars()
+    pprint.pprint(c.env)
     c.create_config_files()
 
 
