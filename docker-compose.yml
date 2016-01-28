@@ -1,0 +1,108 @@
+# copyleft 2015 teodorescu.serban@gmail.com
+
+################################################
+# IN/OUT SERVICES (if you are a dev, comment varnish)
+################################################
+varnish:
+  extends:
+    file: ./lib/common.yml
+    service: varnish
+
+web:
+  extends:
+    file: ./lib/common.yml
+    service: web
+
+email:
+  extends:
+    file: ./lib/common.yml
+    service: email
+
+################################################
+# CKAN
+################################################
+dataproxy:
+  extends:
+    file: ./lib/common.yml
+    service: dataproxy
+
+solr:
+  extends:
+    file: ./lib/common.yml
+    service: solr
+
+dbckan:
+  extends:
+    file: ./lib/common.yml
+    service: dbckan
+
+ckan:
+  extends:
+    file: ./lib/common.yml
+    service: ckan
+
+################################################
+# GIS PREVIEW
+################################################
+gisapi:
+  extends:
+    file: ./lib/common.yml
+    service: gisapi
+
+gisredis:
+  extends:
+    file: ./lib/common.yml
+    service: gisredis
+
+gislayer:
+  extends:
+    file: ./lib/common.yml
+    service: gislayer
+
+gisworker:
+  extends:
+    file: ./lib/common.yml
+    service: gisworker
+
+gisdb:
+  extends:
+    file: ./lib/common.yml
+    service: gisdb
+
+################################################
+# CPS
+################################################
+dbcps:
+  extends:
+    file: ./lib/common.yml
+    service: dbcps
+
+cps:
+  extends:
+    file: ./lib/common.yml
+    service: cps
+
+################################################
+# BLOG
+################################################
+dbblog:
+  extends:
+    file: ./lib/common.yml
+    service: dbblog
+
+blog:
+  extends:
+    file: ./lib/common.yml
+    service: blog
+
+################################################
+# UTILITIES
+################################################
+util:
+  extends:
+    file: ./lib/common.yml
+    service: util
+jenkins:
+  extends:
+    file: ./lib/common.yml
+    service: jenkins
