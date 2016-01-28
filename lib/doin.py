@@ -77,7 +77,7 @@ class Doin(object):
         """import private files from a remote repo."""
         self.configure_remote_repo()
         for var_name, file_name in self.private_repo['files']:
-            url = ''.join(self.private_repo['base_url'], file_name)
+            url = ''.join([self.private_repo['base_url'], file_name])
             user = self.private_repo['user']
             password = self.private_repo['pass']
             try:
