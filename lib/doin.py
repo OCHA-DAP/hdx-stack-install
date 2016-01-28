@@ -76,27 +76,27 @@ class Doin(object):
     def import_remote_private_files(self):
         """import private files from a remote repo."""
         self.configure_remote_repo()
-        for var_name, file_name in self.private_repo['files']:
-            url = ''.join([self.private_repo['base_url'], file_name])
+        for item in self.private_repo['files']:
+            url = ''.join([self.private_repo['base_url'], item['file_name']])
             user = self.private_repo['user']
             password = self.private_repo['pass']
             try:
                 req = requests.get(url, auth=(user,password))
             except requests.exceptions.ConnectionError:
                 print 'There was a problem connecting to your repo host.'
-                print 'Fetch of', file_name, 'skipped.'
+                print 'Fetch of', item['file_name'], 'skipped.'
             else:
                 if req.status_code == 200:
-                    self.env[var_name] = self._import_file(req.text)
+                    self.env[item['var_name']] = self._import_file(req.text)
                 elif req.status_code == 404:
                     print 'There was a problem with the url path or file name.'
-                    print 'Fetch of', file_name, 'skipped.'
+                    print 'Fetch of', item['file_name'], 'skipped.'
                 elif req.status_code == 401 or req.status_code == 403:
                     print 'There was a problem with your repo credentials.'
-                    print 'Fetch of', file_name, 'skipped.'
+                    print 'Fetch of', item['file_name'], 'skipped.'
                 else:
                     print 'There was a problem connecting to your repo.'
-                    print 'Fetch of', file_name, 'skipped.'
+                    print 'Fetch of', item['file_name'], 'skipped.'
 
     def import_vars(self):
         """load vars from vars file, substitution included, into self.env."""
