@@ -5,6 +5,7 @@
 import fcntl
 import re
 import os
+import requests
 import socket
 import struct
 import sys
@@ -25,6 +26,12 @@ class Doin(object):
         self.var_pattern = var_pattern
         self.private_vars_separator = private_vars_separator
         self.env['DOCKER0_ADDR'] = self.get_ip_address('docker0')
+        self.private_repo = {
+            'base_url': False,
+            'user': False,
+            'pass': False,
+            'files': []
+        }
 
     @staticmethod
     def get_ip_address(ifname):
@@ -51,9 +58,45 @@ class Doin(object):
         return '"' + self.private_vars_separator.join(return_list) + '"'
 
     def import_private_files(self):
-        """import all private files in self.private-files."""
+        """import all private files in self.private_files."""
         for var_name, file_name in self.private_files.items():
             self.env[var_name] = self._import_file(file_name)
+
+    def configure_remote_repo(self):
+        """configure params to be able to connect to a remote repo."""
+        if not self.private_repo['base_url']:
+            print 'Example of a base url:',
+            print 'https://bitbucket.org/user/private-repo/raw/master/'
+            self.private_repo['base_url'] = raw_input('Base url for your repo: ')
+        if not self.private_repo['user']:
+            self.private_repo['user'] = raw_input('Your repo username: ')
+        if not self.private_repo['pass']:
+            self.private_repo['pass'] = raw_input('Your repo password: ')
+
+    def import_remote_private_files(self):
+        """import private files from a remote repo."""
+        self.configure_remote_repo()
+        for var_name, file_name in self.private_repo['files']:
+            url = ''.join(self.private_repo['url'], file_name)
+            user = self.private_repo['user']
+            password = self.private_repo['pass']
+            try:
+                req = requests.get(url, auth=(user,password))
+            except requests.exceptions.ConnectionError:
+                print 'There was a problem connecting to your repo host.'
+                print 'Fetch of', file_name, 'skipped.'
+            else:
+                if req.status_code == 200:
+                    self.env[var_name] = self._import_file(req.text)
+                elif req.status_code == 404:
+                    print 'There was a problem with the url path or file name.'
+                    print 'Fetch of', file_name, 'skipped.'
+                elif req.status_code == 401 or req.status_code == 403:
+                    print 'There was a problem with your repo credentials.'
+                    print 'Fetch of', file_name, 'skipped.'
+                else:
+                    print 'There was a problem connecting to your repo.'
+                    print 'Fetch of', file_name, 'skipped.'
 
     def import_vars(self):
         """load vars from vars file, substitution included, into self.env."""
@@ -133,14 +176,50 @@ def main():
     }
     # where are your private files located and what are the variable names
     # you want to assign to the resulting imported string
-    c.private_files = {
-        'HDX_SSL_CRT': '_example_crt.pem',
-        'HDX_SSL_KEY': '_example_key.pem',
-        # 'SSH_PUB_KEY': 'ssh.pub',
-        # 'SSH_KEY': 'ssh.key',
+    # c.private_files = {
+    #     'HDX_SSL_CRT': '_example_crt.pem',
+    #     'HDX_SSL_KEY': '_example_key.pem',
+    #     # 'SSH_PUB_KEY': 'ssh.pub',
+    #     # 'SSH_KEY': 'ssh.key',
+    # }
+    c.private_repo = {
+        'base_url': 'https://bitbucket.org/teodorescuserban/hdx-install-private/raw/master/',
+        'user': '',
+        'pass': '',
+        'files': [
+            {
+                'var_name': 'HDX_SSL_CRT',
+                'file_name': 'ssl.crt'
+            },
+            {
+                'var_name': 'HDX_SSL_KEY',
+                'file_name': 'ssl.key'
+            },
+            {
+                'var_name': 'HDX_SSH_PUB',
+                'file_name': 'ssh.crt'
+            },
+            {
+                'var_name': 'HDX_SSH_KEY',
+                'file_name': 'ssh.key'
+            },
+            {
+                'var_name': 'HDX_DKIM_CRT',
+                'file_name': 'dkim.crt'
+            },
+            {
+                'var_name': 'HDX_DKIM_KEY',
+                'file_name': 'dkim.key'
+            },
+            {
+                'var_name': 'HDX_NGINX_PASS',
+                'file_name': 'nginx.pass'
+            },
+        ]
     }
 
-    c.import_private_files()
+    # c.import_private_files()
+    c.import_remote_private_files()
     c.import_vars()
     c.create_config_files()
 
