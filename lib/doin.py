@@ -74,7 +74,7 @@ class Doin(object):
                     else:
                         # i don't like hardconding baseport key name
                         value = int(self.env['HDX_BASEPORT']) + int(port_inc)
-                        self.env[label] = value
+                        self.env[label] = str(value)
                 # custom vars (a variable deduced from another)
                 if label in self.custom_vars:
                     name, regex, subst = self.custom_vars[label]
