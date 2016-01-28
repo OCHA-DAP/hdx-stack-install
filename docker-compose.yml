@@ -1,12 +1,8 @@
 # copyleft 2015 teodorescu.serban@gmail.com
 
 ################################################
-# IN/OUT SERVICES (if you are a dev, comment varnish)
+# IN/OUT SERVICES
 ################################################
-varnish:
-  extends:
-    file: ./lib/common.yml
-    service: varnish
 
 web:
   extends:
