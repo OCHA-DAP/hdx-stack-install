@@ -114,9 +114,9 @@ class Doin(object):
                 template_file = os.path.join(my_abs_path,
                                              template_location,
                                              template_file)
-                print template_file
                 if not template_file.endswith('.tpl'):
                     continue
+                print template_file
                 self.apply_template(template_file)
 
 
@@ -133,8 +133,8 @@ def main():
     # where are your private files located and what are the variable names
     # you want to assign to the resulting imported string
     c.private_files = {
-        'SSL_CRT': '_example_crt.pem',
-        'SSL_KEY': '_example_key.pem',
+        'HDX_SSL_CRT': '_example_crt.pem',
+        'HDX_SSL_KEY': '_example_key.pem',
         # 'SSH_PUB_KEY': 'ssh.pub',
         # 'SSH_KEY': 'ssh.key',
     }

@@ -11,14 +11,12 @@
 # --------------------------------------------------------------
 # most likely values you want to change
 # --------------------------------------------------------------
-HDX_DOCKER_ADDR=172.17.42.1
 HDX_DOMAIN=hdx.rwlabs.org
 HDX_PREFIX=prefix-
 HDX_TYPE=dev
-#HDX_SHORT_PREFIX=$(echo $HDX_PREFIX | sed 's/-$//')
 HDX_BASE_VOL_PATH=/data/volumes/${HDX_SHORT_PREFIX}
 HDX_CPS_BRANCH=tags/v0.11.12
-HDX_CKAN_BRANCH=tags/v0.13.4
+HDX_CKAN_BRANCH=tags/v0.14.5
 HDX_HTTPS_REDIRECT=off # This will only be useful if no frontend is doing the redirect
 # --------------------------------
 # change the IP below to make your dataproxy access the production cps
