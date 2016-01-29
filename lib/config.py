@@ -8,7 +8,6 @@ import doin
 
 def main():
     """main."""
-    doin.main()
     c = doin.Doin()
     c.custom_vars = {
         'HDX_PREFIX': ('HDX_SHORT_PREFIX', r'-$', ''),
