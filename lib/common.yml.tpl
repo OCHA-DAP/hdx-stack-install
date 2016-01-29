@@ -21,6 +21,7 @@ web:
     - ./envs/.env_cps
     - ./envs/.env_dataproxy
     - ./envs/.env_gis
+    - ./envs/.env_solr
 
 ################################################
 
