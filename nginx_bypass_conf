@@ -1,3 +1,0 @@
-location @bypassauth {
-    try_files %uri @go_ahead;
-}

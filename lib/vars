@@ -1,0 +1,95 @@
+# 2015 copyleft "Serban Teodorescu <teodorescu.serban@gmail.com>"
+
+#
+# these values are set for production.
+# please change to suit your use-case
+# note that prefix MUST contain only letters, numbers and dashes
+# (e.g. for a theoretical romanian-based backup center you would use "ro-"
+# so that the urls become "ro-data.hdx.rwlabs.org", "ro-manage.hdx.rwlabs.org"
+#
+
+# --------------------------------------------------------------
+# most likely values you want to change
+# --------------------------------------------------------------
+HDX_DOMAIN=hdx.rwlabs.org
+HDX_PREFIX=prefix-
+HDX_TYPE=dev
+HDX_BASE_VOL_PATH=/data/volumes/${HDX_SHORT_PREFIX}
+HDX_CPS_BRANCH=tags/v0.11.12
+HDX_CKAN_BRANCH=tags/v0.14.5
+# This will only be useful if no frontend is doing the redirect
+HDX_HTTPS_REDIRECT=off
+# choose YES if using SSL terminator service, NO otherwise
+HDX_HTTPS_REDIRECT_ON_PROTO_HEADER=yes
+#
+HDX_DOCKER_ADDR=${DOCKER0_ADDR}
+# --------------------------------
+# change the IP below to make your dataproxy access the production cps
+# this is only needed on non-production environmet
+# --------------------------------
+HDX_PROD_CPS_ADDR=${HDX_DOCKER_ADDR}
+# --------------------------------
+# change the IPs below for Blackmesh production installations!
+# --------------------------------
+# private ip of the multipurpose server
+HDX_MP_ADDR=${HDX_DOCKER_ADDR}
+# private ip of the web frontend server
+HDX_WB_ADDR=${HDX_MP_ADDR}
+# private ip of the database server
+HDX_DB_ADDR=${HDX_MP_ADDR}
+# --------------------------------
+# volumes settings
+# --------------------------------
+# static location (static files like www)
+HDX_VOL_FILES=${HDX_BASE_VOL_PATH}/files
+# backup location
+HDX_VOL_BACKUPS=${HDX_BASE_VOL_PATH}/backups
+# logs location
+HDX_VOL_LOGS=${HDX_BASE_VOL_PATH}/logs
+# db location
+HDX_VOL_DBS=${HDX_BASE_VOL_PATH}/dbs
+# --------------------------------
+HDX_BASEPORT=9600
+HDX_VARNISH_HTTP_PORT=$HDX_BASEPORT
+HDX_HTTP_PORT=$((HDX_BASEPORT+1))
+HDX_HTTPS_PORT=$((HDX_BASEPORT+2))
+# --------------------------------
+HDX_BLOG_ADDR=${HDX_WB_ADDR}
+HDX_BLOG_PORT=$((HDX_BASEPORT+3))
+HDX_CKAN_ADDR=${HDX_WB_ADDR}
+HDX_CKAN_PORT=$((HDX_BASEPORT+4))
+HDX_CPS_ADDR=${HDX_WB_ADDR}
+HDX_CPS_PORT=$((HDX_BASEPORT+5))
+HDX_GISAPI_ADDR=${HDX_WB_ADDR}
+HDX_GISAPI_PORT=$((HDX_BASEPORT+6))
+HDX_GISAPI_DEBUG_ADDR=${HDX_GISAPI_ADDR}
+HDX_GISAPI_DEBUG_PORT=$((HDX_BASEPORT+7))
+HDX_GISLAYER_ADDR=${HDX_WB_ADDR}
+HDX_GISLAYER_PORT=$((HDX_BASEPORT+8))
+HDX_GISREDIS_ADDR=${HDX_WB_ADDR}
+HDX_GISREDIS_PORT=$((HDX_BASEPORT+9))
+HDX_DATAPROXY_ADDR=${HDX_WB_ADDR}
+HDX_DATAPROXY_PORT=$((HDX_BASEPORT+10))
+HDX_SOLR_ADDR=${HDX_DB_ADDR}
+HDX_SOLR_PORT=$((HDX_BASEPORT+11))
+HDX_SMTP_ADDR=${HDX_DOCKER_ADDR}
+HDX_SMTP_PORT=$((HDX_BASEPORT+12))
+HDX_CKANDB_ADDR=${HDX_DB_ADDR}
+HDX_CKANDB_PORT=$((HDX_BASEPORT+13))
+HDX_CPSDB_ADDR=${HDX_DB_ADDR}
+HDX_CPSDB_PORT=$((HDX_BASEPORT+14))
+HDX_GISDB_ADDR=${HDX_DB_ADDR}
+HDX_GISDB_PORT=$((HDX_BASEPORT+15))
+HDX_GISREDIS_ADDR=${HDX_DB_ADDR}
+HDX_GISREDIS_PORT=$((HDX_BASEPORT+16))
+HDX_BLOGDB_ADDR=${HDX_DB_ADDR}
+HDX_BLOGDB_PORT=$((HDX_BASEPORT+17))
+# --------------------------------
+HDX_IMG_BASE=teodorescuserban/hdx-
+HDX_FOLDER=/srv/hdx
+# HDX_BACKUP_FOLDER=/srv/backup
+HDX_BACKUP_DIR=/srv/backup
+HDX_BLOG_DIR=/srv/www/docs
+HDX_GIS_TMP=/tmp
+VIRTUAL_HOST=${HDX_SHORT_PREFIX}.${HDX_DOMAIN},${HDX_PREFIX}docs.${HDX_DOMAIN},${HDX_PREFIX}data.${HDX_DOMAIN},${HDX_PREFIX}manage.${HDX_DOMAIN}
+# --------------------------------------------------------------
