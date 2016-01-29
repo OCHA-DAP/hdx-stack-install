@@ -285,4 +285,3 @@ jenkins:
     - ./envs/.env_ckan_private
     - ./envs/.env_ckan
     - ./envs/.env_common
-

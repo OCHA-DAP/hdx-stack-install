@@ -6,7 +6,6 @@ import fcntl
 import getpass
 import re
 import os
-import pprint
 import requests
 import socket
 import struct
@@ -64,7 +63,7 @@ class Doin(object):
         if not self.private_repo['pass']:
             self.private_repo['pass'] = getpass.getpass('Your repo password: ')
 
-    def _fetch_remote_private_file(self, file_name):
+    def fetch_remote_private_file(self, file_name):
         """
         fetch a file from a remote repo and save it locally.
 
@@ -78,7 +77,6 @@ class Doin(object):
         url = ''.join([self.private_repo['base_url'], file_name])
         user = self.private_repo['user']
         password = self.private_repo['pass']
-        # print url, user, password
         try:
             req = requests.get(url, auth=(user, password))
         except requests.exceptions.ConnectionError:
@@ -103,7 +101,7 @@ class Doin(object):
     def import_remote_private_files(self):
         """import private files from a remote repo."""
         for var_name, file_name in self.private_repo['files']:
-            if self._fetch_remote_private_file(file_name):
+            if self.fetch_remote_private_file(file_name):
                 self.env[var_name] = self._import_file(file_name)
 
     def import_vars(self):
@@ -168,7 +166,6 @@ class Doin(object):
                                              template_file)
                 if not template_file.endswith('.tpl'):
                     continue
-                print template_file
                 self.apply_template(template_file)
 
 
@@ -182,14 +179,7 @@ def main():
         'HDX_PREFIX': ('HDX_SHORT_PREFIX', r'-$', ''),
         'DOMAIN': ('DOMAIN_LABEL', r'\.ro$', 'ro')
     }
-    # where are your private files located and what are the variable names
-    # you want to assign to the resulting imported string
-    # c.private_files = {
-    #     'HDX_SSL_CRT': '_example_crt.pem',
-    #     'HDX_SSL_KEY': '_example_key.pem',
-    #     # 'SSH_PUB_KEY': 'ssh.pub',
-    #     # 'SSH_KEY': 'ssh.key',
-    # }
+    # details about your repo
     c.private_repo = {
         'base_url': 'https://bitbucket.org/teodorescuserban/hdx-install-private/raw/master/',
         'user': 'hdx-user',
@@ -202,11 +192,8 @@ def main():
                   ['HDX_DKIM_KEY', 'dkim.key'],
                   ['HDX_NGINX_PASS', 'nginx.pass']]
     }
-
-    # c.import_private_files()
     c.import_remote_private_files()
     c.import_vars()
-    pprint.pprint(c.env)
     c.create_config_files()
 
 
