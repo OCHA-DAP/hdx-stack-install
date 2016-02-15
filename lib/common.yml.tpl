@@ -191,6 +191,7 @@ cps:
     - ./envs/.env_common
     - ./envs/.env_backup_private
     - ./envs/.env_ckan_private
+    - ./envs/.env_cps
     - ./envs/.env_cps_db
     - ./envs/.env_cps_db_private
     - ./envs/.env_email
