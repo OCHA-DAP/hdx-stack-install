@@ -158,6 +158,8 @@ ckan:
     - ./envs/.env_dataproxy
     - ./envs/.env_email
     - ./envs/.env_gis
+    - ./envs/.env_gis_db
+    - ./envs/.env_gis_db_private
     - ./envs/.env_solr
 
 ################################################
