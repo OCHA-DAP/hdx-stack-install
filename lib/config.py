@@ -2,13 +2,18 @@
 
 # 2015 copyleft "Serban Teodorescu <teodorescu.serban@gmail.com>"
 
+import imp
 import sys
-import doin
+
+HELPER_PATH = 'docohelper.py'
 
 
 def main():
     """main."""
-    c = doin.Doin()
+    doco = imp.load_source('docohelper', HELPER_PATH)
+    # configuring a docker-compose setup.
+    c = doco.DockerHelper.fromhost(templates_root_path='.')
+
     c.custom_vars = {
         'HDX_PREFIX': ('HDX_SHORT_PREFIX', r'-$', ''),
         'DOMAIN': ('DOMAIN_LABEL', r'\.ro$', 'ro')
