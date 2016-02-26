@@ -92,4 +92,6 @@ HDX_BACKUP_DIR=/srv/backup
 HDX_BLOG_DIR=/srv/www/docs
 HDX_GIS_TMP=/tmp
 VIRTUAL_HOST=${HDX_SHORT_PREFIX}.${HDX_DOMAIN},${HDX_PREFIX}docs.${HDX_DOMAIN},${HDX_PREFIX}data.${HDX_DOMAIN},${HDX_PREFIX}manage.${HDX_DOMAIN}
+HDX_SOLR_IS_MASTER=true
+HDX_SOLR_IS_SLAVE=false
 # --------------------------------------------------------------

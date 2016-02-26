@@ -120,6 +120,7 @@ solr:
     - "${HDX_SOLR_ADDR}:${HDX_SOLR_PORT}:8983"
   env_file:
     - ./envs/.env_common
+    - ./envs/.env_solr
 
 dbckan:
   image: ${HDX_IMG_BASE}psql-ckan:latest
