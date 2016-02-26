@@ -104,12 +104,9 @@ class DockerHelper(object):
         sub_vars = re.findall(r'\$\{([0-9a-zA-Z_]+)\}', text.rstrip())
         for var in sub_vars:
             if var not in self.env:
-                print var, 'not found in env!!!'
-                # print 'Quitting'
-                # sys.exit(1)
-                continue
+                self.env[var] = ''
             if self.env[var] is None:
-                continue
+                self.env[var] = ''
             var_pattern = list(self.var_pattern)
             var_pattern.insert(1, var)
             text = text.replace(''.join(var_pattern), self.env[var])
