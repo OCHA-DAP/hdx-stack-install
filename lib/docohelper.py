@@ -156,13 +156,14 @@ class DockerHelper(object):
         for template_file in self._find_templates():
             file_name = re.sub(r'\.tpl$', '', template_file)
             # skip if dst exists
-            if os.path.isfile(file_name):
-                print file_name, 'already created. Remove it to refresh.'
-                print 'Skipping.'
-                continue
+            # if os.path.isfile(file_name):
+            #     print file_name, 'already created. Remove it to refresh.'
+            #     print 'Skipping.'
+            #     continue
             with open(template_file) as t:
                 content = t.read()
-            self._create_file(file_name, self._replace_pattern(content))
+            self._create_file(file_name, self._replace_pattern(content),
+                              overwrite=True, private=False)
 
     def _configure_remote_repo(self):
         """configure params to be able to connect to a remote repo."""

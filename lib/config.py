@@ -33,8 +33,7 @@ def main():
     c.import_remote_private_files()
     c.import_vars()
     c.fetch_remote_private_file('set_private_vars')
-    c.vars_file = '.files/set_private_vars'
-    c.import_vars()
+    c.import_vars('.files/set_private_vars')
     c.create_config_files()
 
 if __name__ == '__main__':
