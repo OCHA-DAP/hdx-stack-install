@@ -9,6 +9,9 @@ import socket
 import struct
 # import sys
 
+__author__ = 'Serban Teodorescu'
+__license__ = 'GPL 2.0'
+__version__ = '0.2'
 
 class DockerHelper(object):
     """encapsulates some dirty logic for configuring a docker stack."""
