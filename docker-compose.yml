@@ -6,12 +6,12 @@
 
 web:
   extends:
-    file: ./lib/common.yml
+    file: ./common.yml
     service: web
 
 email:
   extends:
-    file: ./lib/common.yml
+    file: ./common.yml
     service: email
 
 ################################################
@@ -19,22 +19,22 @@ email:
 ################################################
 dataproxy:
   extends:
-    file: ./lib/common.yml
+    file: ./common.yml
     service: dataproxy
 
 solr:
   extends:
-    file: ./lib/common.yml
+    file: ./common.yml
     service: solr
 
 dbckan:
   extends:
-    file: ./lib/common.yml
+    file: ./common.yml
     service: dbckan
 
 ckan:
   extends:
-    file: ./lib/common.yml
+    file: ./common.yml
     service: ckan
 
 ################################################
@@ -42,27 +42,27 @@ ckan:
 ################################################
 gisapi:
   extends:
-    file: ./lib/common.yml
+    file: ./common.yml
     service: gisapi
 
 gisredis:
   extends:
-    file: ./lib/common.yml
+    file: ./common.yml
     service: gisredis
 
 gislayer:
   extends:
-    file: ./lib/common.yml
+    file: ./common.yml
     service: gislayer
 
 gisworker:
   extends:
-    file: ./lib/common.yml
+    file: ./common.yml
     service: gisworker
 
 gisdb:
   extends:
-    file: ./lib/common.yml
+    file: ./common.yml
     service: gisdb
 
 ################################################
@@ -70,12 +70,12 @@ gisdb:
 ################################################
 dbcps:
   extends:
-    file: ./lib/common.yml
+    file: ./common.yml
     service: dbcps
 
 cps:
   extends:
-    file: ./lib/common.yml
+    file: ./common.yml
     service: cps
 
 ################################################
@@ -83,12 +83,12 @@ cps:
 ################################################
 dbblog:
   extends:
-    file: ./lib/common.yml
+    file: ./common.yml
     service: dbblog
 
 blog:
   extends:
-    file: ./lib/common.yml
+    file: ./common.yml
     service: blog
 
 ################################################
@@ -96,9 +96,9 @@ blog:
 ################################################
 util:
   extends:
-    file: ./lib/common.yml
+    file: ./common.yml
     service: util
 jenkins:
   extends:
-    file: ./lib/common.yml
+    file: ./common.yml
     service: jenkins
