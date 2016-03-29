@@ -13,6 +13,7 @@ __author__ = 'Serban Teodorescu'
 __license__ = 'GPL 2.0'
 __version__ = '0.2'
 
+
 class DockerHelper(object):
     """encapsulates some dirty logic for configuring a docker stack."""
 
@@ -75,7 +76,7 @@ class DockerHelper(object):
     @staticmethod
     def _create_file(file_name, content, private=True,
                      overwrite=False, uid=0, gid=0):
-        """create a special file from the content provided."""
+        """create a file from the content provided."""
         if private:
             chmode = 0o400
         else:
