@@ -87,6 +87,7 @@ HDX_BLOGDB_PORT=$((HDX_BASEPORT+17))
 # --------------------------------
 HDX_IMG_BASE=teodorescuserban/hdx-
 HDX_FOLDER=/srv/hdx
+HDX_FILESTORE=/srv/filestore
 # HDX_BACKUP_FOLDER=/srv/backup
 HDX_BACKUP_DIR=/srv/backup
 HDX_BLOG_DIR=/srv/www/docs

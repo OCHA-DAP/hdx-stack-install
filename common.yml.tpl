@@ -27,7 +27,7 @@ web:
     HDX_CKAN_ADDR: '${HDX_CKAN_ADDR}'
     HDX_CKAN_BRANCH: '${HDX_CKAN_BRANCH}'
     HDX_CKAN_PORT: '${HDX_CKAN_PORT}'
-    HDX_FILESTORE=/srv/filestore
+    HDX_FILESTORE: '${HDX_FILESTORE}'
     # CPS #
     HDX_CPS_ADDR: '${HDX_CPS_ADDR}'
     HDX_CPS_BRANCH: '${HDX_CPS_BRANCH}'
@@ -276,7 +276,7 @@ ckan:
   restart: always
   volumes:
     - "${HDX_VOL_BACKUPS}:/srv/backup"
-    - "${HDX_VOL_FILES}/filestore:/srv/filestore"
+    - "${HDX_VOL_FILES}/filestore:${HDX_FILESTORE}"
     - "${HDX_VOL_LOGS}/ckan:/var/log/ckan"
   ports:
     - "${HDX_CKAN_ADDR}:${HDX_CKAN_PORT}:5000"
@@ -302,7 +302,7 @@ ckan:
     HDX_CKAN_ADDR: '${HDX_CKAN_ADDR}'
     HDX_CKAN_BRANCH: '${HDX_CKAN_BRANCH}'
     HDX_CKAN_PORT: '${HDX_CKAN_PORT}'
-    HDX_FILESTORE=/srv/filestore
+    HDX_FILESTORE: '${HDX_FILESTORE}'
     # CKAN_DB #
     HDX_CKANDB_ADDR: '${HDX_CKANDB_ADDR}'
     HDX_CKANDB_PORT: '${HDX_CKANDB_PORT}'
@@ -485,7 +485,7 @@ util:
 #  restart: always
   volumes:
     - "${HDX_VOL_BACKUPS}:/srv/backup"
-    - "${HDX_VOL_FILES}/filestore:/srv/filestore"
+    - "${HDX_VOL_FILES}/filestore:${HDX_FILESTORE}"
     - "${HDX_VOL_FILES}/gistmp:/srv/gistmp"
     - "${HDX_VOL_FILES}/www:/srv/www"
     - "${HDX_VOL_LOGS}:/srv/logs"
@@ -522,7 +522,7 @@ util:
     HDX_CKAN_ADDR: '${HDX_CKAN_ADDR}'
     HDX_CKAN_BRANCH: '${HDX_CKAN_BRANCH}'
     HDX_CKAN_PORT: '${HDX_CKAN_PORT}'
-    HDX_FILESTORE=/srv/filestore
+    HDX_FILESTORE: '${HDX_FILESTORE}'
     # CKAN_DB #
     HDX_CKANDB_ADDR: '${HDX_CKANDB_ADDR}'
     HDX_CKANDB_PORT: '${HDX_CKANDB_PORT}'
@@ -620,7 +620,7 @@ jenkins:
     HDX_CKAN_ADDR: '${HDX_CKAN_ADDR}'
     HDX_CKAN_BRANCH: '${HDX_CKAN_BRANCH}'
     HDX_CKAN_PORT: '${HDX_CKAN_PORT}'
-    HDX_FILESTORE=/srv/filestore
+    HDX_FILESTORE '${HDX_FILESTORE}'
     # CKAN_DB #
     HDX_CKANDB_ADDR: '${HDX_CKANDB_ADDR}'
     HDX_CKANDB_PORT: '${HDX_CKANDB_PORT}'
