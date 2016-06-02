@@ -90,6 +90,24 @@ email:
 
 ################################################
 
+mpx:
+  image: teodorescuserban/hdx-mpx:latest
+  volumes:
+    - "${HDX_VOL_FILES}/www/visualization/mpx:/dst"
+  #entrypoint: /init
+  #entrypoint: /deploy.sh
+  command: /deploy.sh
+  # ports:
+  #    - "${HDX_MP_ADDR}:9119:9000"
+
+hxlproxy:
+  image: teodorescuserban/hxl-proxy:latest
+  ports:
+    - "${HDX_HXLPROXY_ADDR}:${HDX_HXLPROXY_PORT}:5000"
+
+
+################################################
+
 gisapi:
   image: ${HDX_IMG_BASE}gisapi:latest
   hostname: gisapi

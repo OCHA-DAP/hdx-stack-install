@@ -15,6 +15,20 @@ email:
     service: email
 
 ################################################
+# MPX
+################################################
+
+mpx:
+  extends:
+    file: ./common.yml
+    service: mpx
+
+hxlproxy:
+  extends:
+    file: ./common.yml
+    service: hxlproxy
+
+################################################
 # CKAN
 ################################################
 dataproxy:
