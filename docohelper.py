@@ -11,7 +11,7 @@ import struct
 
 __author__ = 'Serban Teodorescu'
 __license__ = 'GPL 2.0'
-__version__ = '0.2'
+__version__ = '0.3.1'
 
 
 class DockerHelper(object):
@@ -89,7 +89,15 @@ class DockerHelper(object):
         with open(file_name, 'w') as f:
             f.write(content)
 
-        os.chown(file_name, uid, gid)
+        try:
+            os.chown(file_name, uid, gid)
+            os.chmod(file_name, chmode)
+        except:
+            msg = ['You do not have permission to change the owner of',
+                   'the file', file_name, 'to user id', str(uid),
+                   'and group id', str(gid)]
+            print ' '.join(msg)
+
         os.chmod(file_name, chmode)
 
     def create_special_file(self, file_name, content_var, private=True,
@@ -139,6 +147,7 @@ class DockerHelper(object):
                         # i don't like hardconding baseport key name
                         value = int(self.env['HDX_BASEPORT']) + int(port_inc)
                         self.env[label] = str(value)
+
                 # custom vars (a variable deduced from another)
                 if label in self.custom_vars:
                     name, regex, subst = self.custom_vars[label]
