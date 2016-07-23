@@ -15,10 +15,14 @@ if [ -z $EDITOR ]; then
   fi
 fi
 
-echo "Please customize the vars."
-echo "At least the prefix I would guess,"
-read -p "Press any key to start $EDITOR. " -n 1 -r
-$EDITOR vars
+if [ "$1" != "-r" ]; then
+    echo "Skipping configure."
+else
+    echo "Please customize the vars."
+    echo "At least the prefix I would guess,"
+    read -p "Press any key to start $EDITOR. " -n 1 -r
+    $EDITOR vars
+fi
 
 echo "Creating / refreshing docker-compose configuration file and env files..."
 
