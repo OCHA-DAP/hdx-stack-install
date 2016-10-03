@@ -98,3 +98,5 @@ VIRTUAL_HOST=${HDX_SHORT_PREFIX}.${HDX_DOMAIN},${HDX_PREFIX}docs.${HDX_DOMAIN},$
 HDX_SOLR_IS_MASTER=true
 HDX_SOLR_IS_SLAVE=false
 # --------------------------------------------------------------
+NEW_RELIC_CONFIG=/srv/newrelic.ini
+NEW_RELIC_ENABLED=false
