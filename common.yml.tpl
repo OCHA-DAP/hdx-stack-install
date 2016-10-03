@@ -368,9 +368,9 @@ ckan:
     IS_MASTER: '${HDX_SOLR_IS_MASTER}'
     IS_SLAVE: '${HDX_SOLR_IS_SLAVE}'
     # NEW RELIC #
-    NEW_RELIC_CONFIG: '/srv/newrelic.ini'
-    NEW_RELIC_ENABLED: 'true'
-    NEW_RELIC_LICENSE: '000aaabbbccc'
+    NEW_RELIC_CONFIG: '${NEW_RELIC_CONFIG}'
+    NEW_RELIC_ENABLED: '${NEW_RELIC_ENABLED}'
+    NEW_RELIC_LICENSE: '${NEW_RELIC_LICENSE}'
 
 ################################################
 
