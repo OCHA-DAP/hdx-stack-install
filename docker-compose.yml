@@ -4,6 +4,11 @@
 version: "2"
 
 networks:
+  default:
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.98.15.0/24
   proxy:
     external:
       name: nginx-proxy
@@ -15,12 +20,12 @@ services:
 
   web:
     extends:
-      file: ./common.yml
+      file: ./_common.yml
       service: web
 
   email:
     extends:
-      file: ./common.yml
+      file: ./_common.yml
       service: email
 
   ################################################
@@ -29,12 +34,12 @@ services:
 
   mpx:
     extends:
-      file: ./common.yml
+      file: ./_common.yml
       service: mpx
 
   hxlproxy:
     extends:
-      file: ./common.yml
+      file: ./_common.yml
       service: hxlproxy
 
   ################################################
@@ -42,22 +47,22 @@ services:
   ################################################
   dataproxy:
     extends:
-      file: ./common.yml
+      file: ./_common.yml
       service: dataproxy
 
   solr:
     extends:
-      file: ./common.yml
+      file: ./_common.yml
       service: solr
 
   dbckan:
     extends:
-      file: ./common.yml
+      file: ./_common.yml
       service: dbckan
 
   ckan:
     extends:
-      file: ./common.yml
+      file: ./_common.yml
       service: ckan
 
   ################################################
@@ -65,27 +70,27 @@ services:
   ################################################
   gisapi:
     extends:
-      file: ./common.yml
+      file: ./_common.yml
       service: gisapi
 
   gisredis:
     extends:
-      file: ./common.yml
+      file: ./_common.yml
       service: gisredis
 
   gislayer:
     extends:
-      file: ./common.yml
+      file: ./_common.yml
       service: gislayer
 
   gisworker:
     extends:
-      file: ./common.yml
+      file: ./_common.yml
       service: gisworker
 
   gisdb:
     extends:
-      file: ./common.yml
+      file: ./_common.yml
       service: gisdb
 
   ################################################
@@ -93,35 +98,45 @@ services:
   ################################################
   dbcps:
     extends:
-      file: ./common.yml
+      file: ./_cps.yml
       service: dbcps
 
   cps:
     extends:
-      file: ./common.yml
+      file: ./_cps.yml
       service: cps
+
+  cps-web:
+    extends:
+      file: ./_cps.yml
+      service: cps-web
 
   ################################################
   # BLOG
   ################################################
   dbblog:
     extends:
-      file: ./common.yml
+      file: ./_blog.yml
       service: dbblog
 
   blog:
     extends:
-      file: ./common.yml
+      file: ./_blog.yml
       service: blog
 
-  ################################################
-  # UTILITIES
-  ################################################
-  util:
+  blog-web:
     extends:
-      file: ./common.yml
-      service: util
-  jenkins:
-    extends:
-      file: ./common.yml
-      service: jenkins
+      file: ./_blog.yml
+      service: blog-web
+
+################################################
+# UTILITIES
+################################################
+#  util:
+#    extends:
+#      file: ./_common.yml
+#      service: util
+#  jenkins:
+#    extends:
+#      file: ./_common.yml
+#      service: jenkins
