@@ -15,7 +15,7 @@ if [ -z $EDITOR ]; then
   fi
 fi
 
-if [ "$1" == "-r" ]; then
+if [ "$1" != "-s" ]; then
   echo "Skipping configure."
 else
   echo "Please customize the vars."
