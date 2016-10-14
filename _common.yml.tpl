@@ -13,9 +13,11 @@ networks:
 services:
   web:
     image: ${HDX_IMG_BASE}nginx:latest
-    hostname: nginx
+    hostname: ${PREFIX}-${STACK}-web
+    container_name: ${PREFIX}-${STACK}-web
     restart: always
     volumes:
+      - "./etc/nginx:/etc/nginx"
       - "${HDX_VOL_FILES}/www:/srv/www"
       - "${HDX_VOL_LOGS}/nginx:/var/log/nginx"
   #  ports:
@@ -66,17 +68,17 @@ services:
       # WEB #
       HDX_HTTPS_REDIRECT: '${HDX_HTTPS_REDIRECT}'
       HDX_HTTPS_REDIRECT_ON_PROTO_HEADER: '${HDX_HTTPS_REDIRECT_ON_PROTO_HEADER}'
-      VIRTUAL_HOST: '${VIRTUAL_HOST}'
+      #VIRTUAL_HOST: '${VIRTUAL_HOST}'
       # WEB_PRV #
       HDX_NGINX_PASS: '${HDX_NGINX_PASS}'
       HDX_SSL_CRT: '${HDX_SSL_CRT}'
       HDX_SSL_KEY: '${HDX_SSL_KEY}'
       HDX_USER_AGENT: '${HDX_USER_AGENT}'
-      VIRTUAL_HOST=${VIRTUAL_HOST}
-      VIRTUAL_PORT=80
-      VIRTUAL_NETWORK=nginx-proxy
-      LETSENCRYPT_HOST=${VIRTUAL_HOST}
-      LETSENCRYPT_EMAIL=ops+hrinfo@humanitarianresponse.info
+      VIRTUAL_HOST: '${VIRTUAL_HOST}'
+      VIRTUAL_PORT: '80'
+      VIRTUAL_NETWORK: 'nginx-proxy'
+      LETSENCRYPT_HOST: '${VIRTUAL_HOST}'
+      LETSENCRYPT_EMAIL: 'ops+hrinfo@humanitarianresponse.info'
     networks:
       default:
       proxy:
@@ -85,7 +87,8 @@ services:
 
   email:
     image: ${HDX_IMG_BASE}email:latest
-    hostname: email
+    hostname: ${PREFIX}-${STACK}-email
+    container_name: ${PREFIX}-${STACK}-email
     restart: always
     volumes:
       - "${HDX_VOL_LOGS}/email:/var/log/email"
@@ -109,66 +112,35 @@ services:
 
   mpx:
     image: teodorescuserban/hdx-mpx:latest
+    hostname: ${PREFIX}-${STACK}-mpx
+    container_name: ${PREFIX}-${STACK}-mpx
     volumes:
       - "${HDX_VOL_FILES}/www/visualization/mpx:/dst"
-    #entrypoint: /init
-    #entrypoint: /deploy.sh
     command: /deploy.sh
-    # ports:
-    #    - "${HDX_MP_ADDR}:9119:9000"
+
+  hxlpreview-builder:
+    image: teodorescuserban/hdx-hxlpreview-builder:latest
+    hostname: ${PREFIX}-${STACK}-hxlpreview-builder
+    container_name: ${PREFIX}-${STACK}-hxlpreview-builder
+    volumes:
+      - "${HDX_VOL_FILES}/src:/src"
+      - "${HDX_VOL_FILES}/www/visualization/hxlpreview:/dst"
 
   hxlproxy:
-    image: teodorescuserban/hxl-proxy:latest
-  #  ports:
-  #    - "${HDX_HXLPROXY_ADDR}:${HDX_HXLPROXY_PORT}:5000"
-
+    #image: teodorescuserban/hxl-proxy:latest
+    image: teodorescuserban/hxl-proxy:test-201611
+    hostname: ${PREFIX}-${STACK}-hxlproxy
+    container_name: ${PREFIX}-${STACK}-hxlproxy
 
   ################################################
 
   gisapi:
     image: ${HDX_IMG_BASE}gisapi:latest
-    hostname: gisapi
+    hostname: ${PREFIX}-${STACK}-gisapi
+    container_name: ${PREFIX}-${STACK}-gisapi
   #  ports:
   #    - "${HDX_GISAPI_ADDR}:${HDX_GISAPI_PORT}:80"
   #    - "${HDX_GISAPI_DEBUG_ADDR}:${HDX_GISAPI_DEBUG_PORT}:5858"
-    environment:
-      # COMMON #
-      TERM: 'xterm'
-      HDX_DOMAIN: '${HDX_DOMAIN}'
-      HDX_PREFIX: '${HDX_PREFIX}'
-      HDX_SHORT_PREFIX: '${HDX_SHORT_PREFIX}'
-      HDX_TYPE: '${HDX_TYPE}'
-      # GIS_DB #
-  #    HDX_GISDB_ADDR: '${HDX_GISDB_ADDR}'
-  #    HDX_GISDB_PORT: '${HDX_GISDB_PORT}'
-      # GIS_REDIS #
-  #    HDX_GISREDIS_ADDR: '${HDX_GISREDIS_ADDR}'
-  #    HDX_GISREDIS_PORT: '${HDX_GISREDIS_PORT}'
-      # ?? why not GIS_PRV as well ??
-      # GIS_PRV #
-      #HDX_GIS_API_KEY: '${HDX_GIS_API_KEY}'
-
-
-  gisredis:
-    image: ${HDX_IMG_BASE}redis:latest
-    hostname: gisredis
-  #  ports:
-  #    - "${HDX_GISREDIS_ADDR}:${HDX_GISREDIS_PORT}:6379"
-    environment:
-      # COMMON #
-      TERM: 'xterm'
-      HDX_DOMAIN: '${HDX_DOMAIN}'
-      HDX_PREFIX: '${HDX_PREFIX}'
-      HDX_SHORT_PREFIX: '${HDX_SHORT_PREFIX}'
-      HDX_TYPE: '${HDX_TYPE}'
-
-  gislayer:
-    image: ${HDX_IMG_BASE}gislayer:latest
-    hostname: gislayer
-  #  ports:
-  #    - "${HDX_GISLAYER_ADDR}:${HDX_GISLAYER_PORT}:5000"
-  #  extra_hosts:
-  #    - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
     environment:
       # COMMON #
       TERM: 'xterm'
@@ -186,12 +158,68 @@ services:
       HDX_GISDB_DB: '${HDX_GISDB_DB}'
       HDX_GISDB_USER: '${HDX_GISDB_USER}'
       HDX_GISDB_PASS: '${HDX_GISDB_PASS}'
+      # ?? why not GIS_PRV as well ??
+      # GIS_PRV #
+      #HDX_GIS_API_KEY: '${HDX_GIS_API_KEY}'
+
+
+  gisredis:
+    image: unocha/alpine-redis:latest
+    #image: ${HDX_IMG_BASE}redis:latest
+    hostname: ${PREFIX}-${STACK}-gisredis
+    container_name: ${PREFIX}-${STACK}-gisredis
+    volumes:
+      - "${HDX_VOL_DBS}/redis:/var/lib/redis"
+      - "${HDX_VOL_LOGS}/redis:/var/log/redis"
+  #  ports:
+  #    - "${HDX_GISREDIS_ADDR}:${HDX_GISREDIS_PORT}:6379"
+    environment:
+      # COMMON #
+      TERM: 'xterm'
+      HDX_DOMAIN: '${HDX_DOMAIN}'
+      HDX_PREFIX: '${HDX_PREFIX}'
+      HDX_SHORT_PREFIX: '${HDX_SHORT_PREFIX}'
+      HDX_TYPE: '${HDX_TYPE}'
+
+  gislayer:
+    #image: ${HDX_IMG_BASE}gislayer:latest
+    #image: unocha/alpine-base-s6:3.4
+    image: gis2l
+    hostname: ${PREFIX}-${STACK}-gislayer
+    container_name: ${PREFIX}-${STACK}-gislayer
+  #  ports:
+  #    - "${HDX_GISLAYER_ADDR}:${HDX_GISLAYER_PORT}:5000"
+  #  extra_hosts:
+  #    - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
+    environment:
+      # COMMON #
+      TERM: 'xterm'
+      HDX_DOMAIN: '${HDX_DOMAIN}'
+      HDX_PREFIX: '${HDX_PREFIX}'
+      HDX_SHORT_PREFIX: '${HDX_SHORT_PREFIX}'
+      HDX_TYPE: '${HDX_TYPE}'
+      # to remove gis db addr and port AND gis redis addr and port, we need to change 
+      # the app.conf.tpl 
+      # GIS_DB #
+      HDX_GISDB_ADDR: 'gisdb'
+      HDX_GISDB_PORT: '5432'
+      # GIS_REDIS #
+      HDX_GISREDIS_ADDR: 'gisredis'
+      HDX_GISREDIS_PORT: '6379'
+      # GIS_DB_PRV #
+      HDX_GISDB_DB: '${HDX_GISDB_DB}'
+      HDX_GISDB_USER: '${HDX_GISDB_USER}'
+      HDX_GISDB_PASS: '${HDX_GISDB_PASS}'
+      HDX_GIS_TMP: '${HDX_GIS_TMP}'
       # GIS_PRV #
       HDX_GIS_API_KEY: '${HDX_GIS_API_KEY}'
 
   gisworker:
-    image: ${HDX_IMG_BASE}gisworker:latest
-    hostname: gisworker
+    #image: ${HDX_IMG_BASE}gisworker:latest
+    #image: unocha/alpine-base-s6:3.4
+    image: gis3w
+    hostname: ${PREFIX}-${STACK}-gisworker
+    container_name: ${PREFIX}-${STACK}-gisworker
   #  extra_hosts:
   #    - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
     environment:
@@ -211,12 +239,14 @@ services:
   #    HDX_GISLAYER_PORT: '${HDX_GISLAYER_PORT}'
       # GIS_OTHER #
       HDX_GIS_TMP: '${HDX_GIS_TMP}'
+      # to remove gis db addr and port AND gis redis addr and port, we need to change 
+      # the app.conf.tpl 
       # GIS_DB #
-  #    HDX_GISDB_ADDR: '${HDX_GISDB_ADDR}'
-  #    HDX_GISDB_PORT: '${HDX_GISDB_PORT}'
+      HDX_GISDB_ADDR: 'gisdb'
+      HDX_GISDB_PORT: '5432'
       # GIS_REDIS #
-  #    HDX_GISREDIS_ADDR: '${HDX_GISREDIS_ADDR}'
-  #    HDX_GISREDIS_PORT: '${HDX_GISREDIS_PORT}'
+      HDX_GISREDIS_ADDR: 'gisredis'
+      HDX_GISREDIS_PORT: '6379'
       # GIS_DB_PRV #
       HDX_GISDB_DB: '${HDX_GISDB_DB}'
       HDX_GISDB_USER: '${HDX_GISDB_USER}'
@@ -226,25 +256,33 @@ services:
   #  mem_limit: 1G
 
   gisdb:
-    image: ${HDX_IMG_BASE}psql-gis:latest
-    hostname: gisdb
+    image: unocha/alpine-base-postgis:2010-PR90
+    #image: ${HDX_IMG_BASE}psql-gis:latest
+    hostname: ${PREFIX}-${STACK}-gisdb
+    container_name: ${PREFIX}-${STACK}-gisdb
     volumes:
-      - "${HDX_VOL_DBS}/psql-gis:/srv/db"
+      - "${HDX_VOL_BACKUPS}:/srv/backup"
+      - "${HDX_VOL_DBS}/psql-gis:/var/lib/pgsql"
       - "${HDX_VOL_LOGS}/gis-psql:/var/log/psql"
   #  ports:
   #    - "${HDX_GISDB_ADDR}:${HDX_GISDB_PORT}:5432"
     environment:
-      # COMMON #
-      TERM: 'xterm'
-      HDX_DOMAIN: '${HDX_DOMAIN}'
-      HDX_PREFIX: '${HDX_PREFIX}'
-      HDX_SHORT_PREFIX: '${HDX_SHORT_PREFIX}'
-      HDX_TYPE: '${HDX_TYPE}'
+      POSTGRESQL_DB: '${HDX_GISDB_DB}'
+      POSTGRESQL_USER: '${HDX_GISDB_USER}'
+      POSTGRESQL_PASS: '${HDX_GISDB_PASS}'
+  #   # COMMON #
+  #      TERM: 'xterm'
+  #      HDX_DOMAIN: '${HDX_DOMAIN}'
+  #      HDX_PREFIX: '${HDX_PREFIX}'
+  #      HDX_SHORT_PREFIX: '${HDX_SHORT_PREFIX}'
+  #      HDX_TYPE: '${HDX_TYPE}'
 
   ################################################
   dataproxy:
-    image: ${HDX_IMG_BASE}dataproxy:latest
-    hostname: dataproxy
+    image: ${HDX_IMG_BASE}dataproxy:alpine
+    #image: ${HDX_IMG_BASE}dataproxy:latest
+    hostname: ${PREFIX}-${STACK}-dataproxy
+    container_name: ${PREFIX}-${STACK}-dataproxy
     restart: always
   #  ports:
   #    - "${HDX_DATAPROXY_ADDR}:${HDX_DATAPROXY_PORT}:5000"
@@ -261,11 +299,14 @@ services:
       HDX_TYPE: '${HDX_TYPE}'
 
   solr:
-    image: ${HDX_IMG_BASE}solr:latest
-    hostname: solr
+    image: unocha/alpine-solr:4
+    #${HDX_IMG_BASE}solr:latest
+    hostname: ${PREFIX}-${STACK}-solr
+    container_name: ${PREFIX}-${STACK}-solr
     restart: always
     volumes:
-      - "${HDX_VOL_DBS}/solr:/srv/solr/example/solr/ckan/data"
+      - "./etc/solr:/srv/solr/example/solr/ckan"
+      - "${HDX_VOL_DBS}/solr:/srv/data/ckan"
   #  ports:
   #    - "${HDX_SOLR_ADDR}:${HDX_SOLR_PORT}:8983"
     environment:
@@ -282,11 +323,14 @@ services:
       IS_SLAVE: '${HDX_SOLR_IS_SLAVE}'
 
   dbckan:
-    image: ${HDX_IMG_BASE}psql-ckan:latest
-    hostname: dbckan
+    image: unocha/alpine-base-postgres:201010-PR90
+    #${HDX_IMG_BASE}psql-ckan:latest
+    hostname: ${PREFIX}-${STACK}-dbckan
+    container_name: ${PREFIX}-${STACK}-dbckan
     restart: always
     volumes:
-      - "${HDX_VOL_DBS}/psql-ckan:/srv/db"
+      - "${HDX_VOL_BACKUPS}:/srv/backup"
+      - "${HDX_VOL_DBS}/psql-ckan:/var/lib/pgsql"
       - "${HDX_VOL_LOGS}/ckan-psql:/var/log/psql"
   #  ports:
   #    - "${HDX_CKANDB_ADDR}:${HDX_CKANDB_PORT}:5432"
@@ -306,8 +350,9 @@ services:
       HDX_CKANDB_USER: '${HDX_CKANDB_USER}'
 
   ckan:
-    image: ${HDX_IMG_BASE}ckan:latest
-    hostname: ckan
+    image: ${HDX_IMG_BASE}ckan:${CKAN_VERSION}
+    hostname: ${PREFIX}-${STACK}-ckan
+    container_name: ${PREFIX}-${STACK}-ckan
     restart: always
     volumes:
       - "${HDX_VOL_BACKUPS}:/srv/backup"
@@ -326,6 +371,7 @@ services:
       HDX_PREFIX: '${HDX_PREFIX}'
       HDX_SHORT_PREFIX: '${HDX_SHORT_PREFIX}'
       HDX_TYPE: '${HDX_TYPE}'
+      INI_FILE: '${INI_FILE}'
       # BACKUP_PRV #
       HDX_BACKUP_BASE_DIR: '${HDX_BACKUP_BASE_DIR}'
       HDX_BACKUP_DIR: '${HDX_BACKUP_DIR}'
@@ -394,35 +440,24 @@ services:
   ################################################
 
   dbcps:
-    image: ${HDX_IMG_BASE}psql-cps:latest
-    hostname: dbcps
+    image: unocha/alpine-base-postgres:201010-PR85
+    #${HDX_IMG_BASE}psql-cps:latest
+    hostname: ${PREFIX}-${STACK}-dbcps
+    container_name: ${PREFIX}-${STACK}-dbcps
     restart: always
     volumes:
-      - "${HDX_VOL_DBS}/psql-cps:/srv/db"
-      - "${HDX_VOL_LOGS}/cps-psql:/var/log/psql"
-  #  ports:
-  #    - "${HDX_CPSDB_ADDR}:${HDX_CPSDB_PORT}:5432"
-    environment:
-      # COMMON #
-      TERM: 'xterm'
-      HDX_DOMAIN: '${HDX_DOMAIN}'
-      HDX_PREFIX: '${HDX_PREFIX}'
-      HDX_SHORT_PREFIX: '${HDX_SHORT_PREFIX}'
-      HDX_TYPE: '${HDX_TYPE}'
+      - "${HDX_VOL_DBS}/psql-cps:/var/lib/pgsql"
 
   cps:
-    image: ${HDX_IMG_BASE}cps:latest
-    hostname: cps
+    #image: ${HDX_IMG_BASE}cps:v0.15.1
+    image: ${HDX_IMG_BASE}cps:v0.15.1-alpine
+    hostname: ${PREFIX}-${STACK}-cps
+    container_name: ${PREFIX}-${STACK}-cps
     restart: always
-  #  ports:
-  #    - "${HDX_CPS_ADDR}:${HDX_CPS_PORT}:8080"
     volumes:
       - "${HDX_VOL_BACKUPS}:/srv/backup"
-      - "${HDX_VOL_LOGS}/cps:${HDX_FOLDER}/logs"
-  #  extra_hosts:
-  #    - "${HDX_PREFIX}docs.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
-  #    - "${HDX_PREFIX}data.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
-  #    - "${HDX_PREFIX}manage.${HDX_DOMAIN}: ${HDX_WB_ADDR}"
+      - "${HDX_VOL_LOGS}/cps/cps:${HDX_FOLDER}/logs"
+      - "${HDX_VOL_LOGS}/cps/tomcat:/srv/tomcat/logs"
     environment:
       # COMMON #
       TERM: 'xterm'
@@ -439,32 +474,62 @@ services:
       HDX_SSH_PUB: '${HDX_SSH_PUB}'
       # CKAN_PRV #
       HDX_CKAN_API_KEY: '${HDX_CKAN_API_KEY}'
-      HDX_CKAN_RECAPTCHA_KEY: '${HDX_CKAN_RECAPTCHA_KEY}'
-      HDX_GOOGLE_DEV_KEY: '${HDX_GOOGLE_DEV_KEY}'
-      # CPS #
-  #    HDX_CPS_ADDR: '${HDX_CPS_ADDR}'
-      HDX_CPS_BRANCH: '${HDX_CPS_BRANCH}'
-  #    HDX_CPS_PORT: '${HDX_CPS_PORT}'
-      # CPS_PROD_IP #
-  #    HDX_PROD_CPS_ADDR: '${HDX_PROD_CPS_ADDR}'
-      # CPS_OTHER #
-      HDX_FOLDER: '${HDX_FOLDER}'
-      # CPS_DB #
-  #    HDX_CPSDB_ADDR: '${HDX_CPSDB_ADDR}'
-  #    HDX_CPSDB_PORT: '${HDX_CPSDB_PORT}'
       # CPS_DB_PRV #
       HDX_CPSDB_DB: '${HDX_CPSDB_DB}'
       HDX_CPSDB_PASS: '${HDX_CPSDB_PASS}'
       HDX_CPSDB_USER: '${HDX_CPSDB_USER}'
-      # EMAIL #
-  #    HDX_SMTP_ADDR: '${HDX_SMTP_ADDR}'
-  #    HDX_SMTP_PORT: '${HDX_SMTP_PORT}'
+#      VIRTUAL_HOST: 'bm-manage.humdata.org'
+#      VIRTUAL_PORT: '8080'
+#      VIRTUAL_NETWORK: 'nginx-proxy'
+#      LETSENCRYPT_HOST: 'bm-manage.humdata.org'
+#      LETSENCRYPT_EMAIL: 'ops+hrinfo@humanitarianresponse.info'
+    networks:
+      default:
+        aliases:
+          - manage.hdx.rwlabs.org
+#      proxy:
+
+  web-cps:
+    image: ${HDX_IMG_BASE}nginx:latest
+    hostname: ${PREFIX}-${STACK}-web-cps
+    container_name: ${PREFIX}-${STACK}-web-cps
+    restart: always
+    volumes:
+      - "./etc/nginx-cps:/etc/nginx"
+      - "${HDX_VOL_FILES}/www:/srv/www"
+      - "${HDX_VOL_LOGS}/nginx:/var/log/nginx"
+  #  ports:
+  #    - "${HDX_WB_ADDR}:${HDX_HTTP_PORT}:80"
+  #    - "${HDX_WB_ADDR}:${HDX_HTTPS_PORT}:443"
+    environment:
+      # COMMON #
+      TERM: 'xterm'
+      HDX_DOMAIN: '${HDX_DOMAIN}'
+      HDX_PREFIX: '${HDX_PREFIX}'
+      HDX_SHORT_PREFIX: '${HDX_SHORT_PREFIX}'
+      HDX_TYPE: '${HDX_TYPE}'
+      # WEB #
+      HDX_HTTPS_REDIRECT: '${HDX_HTTPS_REDIRECT}'
+      HDX_HTTPS_REDIRECT_ON_PROTO_HEADER: '${HDX_HTTPS_REDIRECT_ON_PROTO_HEADER}'
+      #VIRTUAL_HOST: '${VIRTUAL_HOST}'
+      VIRTUAL_HOST: '${HDX_PREFIX}manage.${HDX_DOMAIN}'
+      VIRTUAL_PORT: '80'
+      VIRTUAL_NETWORK: 'nginx-proxy'
+      LETSENCRYPT_HOST: '${HDX_PREFIX}manage.${HDX_DOMAIN}'
+      LETSENCRYPT_EMAIL: 'ops+hrinfo@humanitarianresponse.info'
+    networks:
+      default:
+      proxy:
+
+
 
   ################################################
 
   dbblog:
-    image: ${HDX_IMG_BASE}mysql:latest
-    hostname: dbblog
+    image: unocha/alpine-mysql
+    #${HDX_IMG_BASE}mysql:latest
+    hostname: ${PREFIX}-${STACK}-dbblog
+    container_name: ${PREFIX}-${STACK}-dbblog
     restart: always
     volumes:
       - "${HDX_VOL_DBS}/mysql:/srv/db"
@@ -478,10 +543,15 @@ services:
       HDX_PREFIX: '${HDX_PREFIX}'
       HDX_SHORT_PREFIX: '${HDX_SHORT_PREFIX}'
       HDX_TYPE: '${HDX_TYPE}'
+      MYSQL_DIR: '/srv/db'
+      MYSQL_DB: '${HDX_BLOGDB_DB}'
+      MYSQL_USER: '${HDX_BLOGDB_USER}'
+      MYSQL_PASS: '${HDX_BLOGDB_PASS}'
 
   blog:
     image: ${HDX_IMG_BASE}blog:latest
-    hostname: blog
+    hostname: ${PREFIX}-${STACK}-blog
+    container_name: ${PREFIX}-${STACK}-blog
     restart: always
   #  ports:
   #    - "${HDX_BLOG_ADDR}:${HDX_BLOG_PORT}:9000"
@@ -519,6 +589,49 @@ services:
       HDX_BLOGDB_DB: '${HDX_BLOGDB_DB}'
       HDX_BLOGDB_USER: '${HDX_BLOGDB_USER}'
       HDX_BLOGDB_PASS: '${HDX_BLOGDB_PASS}'
+
+
+  web-blog:
+    image: ${HDX_IMG_BASE}nginx:latest
+    hostname: ${PREFIX}-${STACK}-web-blog
+    container_name: ${PREFIX}-${STACK}-web-blog
+    restart: always
+    volumes:
+      - "./etc/nginx-blog:/etc/nginx"
+      - "${HDX_VOL_FILES}/www:/srv/www"
+      - "${HDX_VOL_LOGS}/nginx:/var/log/nginx"
+  #  ports:
+  #    - "${HDX_WB_ADDR}:${HDX_HTTP_PORT}:80"
+  #    - "${HDX_WB_ADDR}:${HDX_HTTPS_PORT}:443"
+    environment:
+      # COMMON #
+      TERM: 'xterm'
+      HDX_DOMAIN: '${HDX_DOMAIN}'
+      HDX_PREFIX: '${HDX_PREFIX}'
+      HDX_SHORT_PREFIX: '${HDX_SHORT_PREFIX}'
+      HDX_TYPE: '${HDX_TYPE}'
+      # BLOG #
+  #    HDX_BLOG_ADDR: '${HDX_BLOG_ADDR}'
+      HDX_BLOG_DIR: '${HDX_BLOG_DIR}'
+  #    HDX_BLOG_PORT: '${HDX_BLOG_PORT}'
+      # WEB #
+      HDX_HTTPS_REDIRECT: '${HDX_HTTPS_REDIRECT}'
+      HDX_HTTPS_REDIRECT_ON_PROTO_HEADER: '${HDX_HTTPS_REDIRECT_ON_PROTO_HEADER}'
+      #VIRTUAL_HOST: '${VIRTUAL_HOST}'
+      # WEB_PRV #
+      HDX_NGINX_PASS: '${HDX_NGINX_PASS}'
+      HDX_SSL_CRT: '${HDX_SSL_CRT}'
+      HDX_SSL_KEY: '${HDX_SSL_KEY}'
+      HDX_USER_AGENT: '${HDX_USER_AGENT}'
+      VIRTUAL_HOST: '${HDX_PREFIX}docs.${HDX_DOMAIN}'
+      VIRTUAL_PORT: '80'
+      VIRTUAL_NETWORK: 'nginx-proxy'
+      LETSENCRYPT_HOST: '${HDX_PREFIX}docs.${HDX_DOMAIN}'
+      LETSENCRYPT_EMAIL: 'ops+hrinfo@humanitarianresponse.info'
+    networks:
+      default:
+      proxy:
+
 
   ################################################
   util:

@@ -12,11 +12,14 @@
 # most likely values you want to change
 # --------------------------------------------------------------
 HDX_DOMAIN=humdata.org
-HDX_PREFIX=prefix-
-HDX_TYPE=dev
-HDX_BASE_VOL_PATH=/data/volumes/${HDX_SHORT_PREFIX}
+HDX_PREFIX=feature-
+HDX_TYPE=feat
+HDX_BASE_VOL_PATH=/srv/hdx/feat
+#/data/volumes/${HDX_SHORT_PREFIX}
 HDX_CPS_BRANCH=tags/v0.15.1
-HDX_CKAN_BRANCH=tags/v1.5.7
+HDX_CKAN_BRANCH=staging
+CKAN_VERSION=latest
+INI_FILE=/srv/prod.ini
 # This will only be useful if no frontend is doing the redirect
 HDX_HTTPS_REDIRECT=off
 # choose YES if using SSL terminator service, NO otherwise
@@ -94,7 +97,8 @@ HDX_FILESTORE=/srv/filestore
 HDX_BACKUP_DIR=/srv/backup
 HDX_BLOG_DIR=/srv/www/docs
 HDX_GIS_TMP=/tmp
-VIRTUAL_HOST=${HDX_SHORT_PREFIX}.${HDX_DOMAIN},${HDX_PREFIX}docs.${HDX_DOMAIN},${HDX_PREFIX}data.${HDX_DOMAIN},${HDX_PREFIX}manage.${HDX_DOMAIN}
+#VIRTUAL_HOST=${HDX_SHORT_PREFIX}.${HDX_DOMAIN},${HDX_PREFIX}docs.${HDX_DOMAIN},${HDX_PREFIX}data.${HDX_DOMAIN},${HDX_PREFIX}manage.${HDX_DOMAIN}
+VIRTUAL_HOST=${HDX_SHORT_PREFIX}.${HDX_DOMAIN},${HDX_PREFIX}data.${HDX_DOMAIN},${HDX_PREFIX}manage.${HDX_DOMAIN}
 HDX_SOLR_IS_MASTER=true
 HDX_SOLR_IS_SLAVE=false
 # --------------------------------------------------------------
@@ -102,3 +106,9 @@ NEW_RELIC_APP_NAME="Python Application"
 NEW_RELIC_CONFIG_FILE=/srv/newrelic.ini
 NEW_RELIC_ENABLED=false
 NEW_RELIC_LOG=false
+# --------------------------------
+BASE_DIR=${HDX_BASE_VOL_PATH}
+# similar to other properties, this is actually the short name of the property
+PREFIX=hdx
+# similar to other properties
+STACK=${HDX_TYPE}

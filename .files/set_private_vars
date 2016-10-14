@@ -1,0 +1,42 @@
+# copyleft 2015 teodorescu.serban@gmail.com
+
+#
+# these values are set for production.
+#
+
+# secret values below!!! do not share!!!
+# --------------------------------------------------------------
+HDX_CKAN_API_KEY=4a4ed4e3-571b-4b99-9bc1-ae1df26b77a8
+HDX_GIS_API_KEY=dc84791a-c56d-40a1-b797-ee14e973cca5
+HDX_CKAN_RECAPTCHA_KEY=6LfoIfMSAAAAAOJqNQeOaHrVSw-AlcRhxVBGLku0
+HDX_USER_AGENT=HDX-Developer-2015
+HDX_GOOGLE_DEV_KEY=AIzaSyDTP19WPq2XgnYwomXuhw3V3eSgGwumvYg
+# production
+#HDX_MIXPANEL_TOKEN=5cbf12bc9984628fb2c55a49daf32e74
+#NEW_RELIC_LICENSE_KEY=4ec8e210eaf905a4ae552752e5342f18c892d592
+# staging
+HDX_MIXPANEL_TOKEN=99035923ee0a67880e6c05ab92b6cbc0
+NEW_RELIC_LICENSE_KEY=3434343434343434343434343434343434343434
+# --------------------------------
+HDX_BACKUP_SERVER=backup.hdx.atman.ro
+HDX_BACKUP_USER=hdx
+HDX_BACKUP_BASE_DIR=/srv/hdx/backup
+# --------------------------------------------------------------
+HDX_CKANDB_USER=ckan
+HDX_CKANDB_PASS=ckan
+HDX_CKANDB_DB=ckan
+HDX_CKANDB_USER_DATASTORE=datastore
+HDX_CKANDB_PASS_DATASTORE=datastore
+HDX_CKANDB_DB_DATASTORE=datastore
+# --------------------------------------------------------------
+HDX_CPSDB_USER=cps
+HDX_CPSDB_PASS=cps
+HDX_CPSDB_DB=cps
+# --------------------------------------------------------------
+HDX_BLOGDB_USER=blog
+HDX_BLOGDB_PASS=blog
+HDX_BLOGDB_DB=blog
+# --------------------------------------------------------------
+HDX_GISDB_USER=gis
+HDX_GISDB_PASS=gis
+HDX_GISDB_DB=gis
