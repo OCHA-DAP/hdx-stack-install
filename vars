@@ -16,7 +16,7 @@ HDX_PREFIX=prefix-
 HDX_TYPE=dev
 HDX_BASE_VOL_PATH=/data/volumes/${HDX_SHORT_PREFIX}
 HDX_CPS_BRANCH=tags/v0.15.1
-HDX_CKAN_BRANCH=tags/v1.0.4
+HDX_CKAN_BRANCH=tags/v1.5.7
 # This will only be useful if no frontend is doing the redirect
 HDX_HTTPS_REDIRECT=off
 # choose YES if using SSL terminator service, NO otherwise

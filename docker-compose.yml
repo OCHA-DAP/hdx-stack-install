@@ -1,118 +1,127 @@
 # copyleft 2015 teodorescu.serban@gmail.com
 
-################################################
-# IN/OUT SERVICES
-################################################
 
-web:
-  extends:
-    file: ./common.yml
-    service: web
+version: "2"
 
-email:
-  extends:
-    file: ./common.yml
-    service: email
+networks:
+  proxy:
+    external:
+      name: nginx-proxy
 
-################################################
-# MPX
-################################################
+services:
+  ################################################
+  # IN/OUT SERVICES
+  ################################################
 
-mpx:
-  extends:
-    file: ./common.yml
-    service: mpx
+  web:
+    extends:
+      file: ./common.yml
+      service: web
 
-hxlproxy:
-  extends:
-    file: ./common.yml
-    service: hxlproxy
+  email:
+    extends:
+      file: ./common.yml
+      service: email
 
-################################################
-# CKAN
-################################################
-dataproxy:
-  extends:
-    file: ./common.yml
-    service: dataproxy
+  ################################################
+  # MPX
+  ################################################
 
-solr:
-  extends:
-    file: ./common.yml
-    service: solr
+  mpx:
+    extends:
+      file: ./common.yml
+      service: mpx
 
-dbckan:
-  extends:
-    file: ./common.yml
-    service: dbckan
+  hxlproxy:
+    extends:
+      file: ./common.yml
+      service: hxlproxy
 
-ckan:
-  extends:
-    file: ./common.yml
-    service: ckan
+  ################################################
+  # CKAN
+  ################################################
+  dataproxy:
+    extends:
+      file: ./common.yml
+      service: dataproxy
 
-################################################
-# GIS PREVIEW
-################################################
-gisapi:
-  extends:
-    file: ./common.yml
-    service: gisapi
+  solr:
+    extends:
+      file: ./common.yml
+      service: solr
 
-gisredis:
-  extends:
-    file: ./common.yml
-    service: gisredis
+  dbckan:
+    extends:
+      file: ./common.yml
+      service: dbckan
 
-gislayer:
-  extends:
-    file: ./common.yml
-    service: gislayer
+  ckan:
+    extends:
+      file: ./common.yml
+      service: ckan
 
-gisworker:
-  extends:
-    file: ./common.yml
-    service: gisworker
+  ################################################
+  # GIS PREVIEW
+  ################################################
+  gisapi:
+    extends:
+      file: ./common.yml
+      service: gisapi
 
-gisdb:
-  extends:
-    file: ./common.yml
-    service: gisdb
+  gisredis:
+    extends:
+      file: ./common.yml
+      service: gisredis
 
-################################################
-# CPS
-################################################
-dbcps:
-  extends:
-    file: ./common.yml
-    service: dbcps
+  gislayer:
+    extends:
+      file: ./common.yml
+      service: gislayer
 
-cps:
-  extends:
-    file: ./common.yml
-    service: cps
+  gisworker:
+    extends:
+      file: ./common.yml
+      service: gisworker
 
-################################################
-# BLOG
-################################################
-dbblog:
-  extends:
-    file: ./common.yml
-    service: dbblog
+  gisdb:
+    extends:
+      file: ./common.yml
+      service: gisdb
 
-blog:
-  extends:
-    file: ./common.yml
-    service: blog
+  ################################################
+  # CPS
+  ################################################
+  dbcps:
+    extends:
+      file: ./common.yml
+      service: dbcps
 
-################################################
-# UTILITIES
-################################################
-util:
-  extends:
-    file: ./common.yml
-    service: util
-jenkins:
-  extends:
-    file: ./common.yml
-    service: jenkins
+  cps:
+    extends:
+      file: ./common.yml
+      service: cps
+
+  ################################################
+  # BLOG
+  ################################################
+  dbblog:
+    extends:
+      file: ./common.yml
+      service: dbblog
+
+  blog:
+    extends:
+      file: ./common.yml
+      service: blog
+
+  ################################################
+  # UTILITIES
+  ################################################
+  util:
+    extends:
+      file: ./common.yml
+      service: util
+  jenkins:
+    extends:
+      file: ./common.yml
+      service: jenkins
